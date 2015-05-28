@@ -1,13 +1,16 @@
-function [u, rot, x] = linear_subspace(n, d, S, D, cos_theta, noise)
+function [u, rot, x] = linear_subspace(N, d, S, D, cos_theta, noise)
 
-pkg load statistics communications
+isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+if isOctave
+  pkg load statistics communications
+end
 
 % generate underlying structure
 u = [];
 mean = zeros(d, 1) + 5;
 for i=[1:S]
   sigma = diag(flipud(cumsum(rand(d, 1))));
-  u(:, :, i) = mvnrnd(mean, sigma, n);
+  u(:, :, i) = mvnrnd(mean, sigma, round(N / 3));
 end
 
 % generate rotation
@@ -20,10 +23,11 @@ for i = [1:S]
     avg_rot = normc(sum(all_rot, 2));
     nullspace = null(all_rot');
     scale = max(max(all_rot' * repmat(avg_rot, 1, d)));
-    % lambda = acos(cos_theta / scale);
-    lambda = acos(cos_theta / scale);
-    idx = randint(d, 1, size(nullspace, 2))+1;
-    rot(:, :, i) = normc(sin(lambda) * log(d+1)/log(2) * nullspace(:, idx) + cos(lambda) * repmat(avg_rot, 1, d));
+    lambda = acos(max(min(cos_theta / scale, 1), 0));
+    idx = randperm(size(nullspace, 2), d);
+    null_coordinate = sin(lambda) * log(d+1)/log(2) * nullspace(:, idx);
+    avg_coordinate = cos(lambda) * repmat(avg_rot, 1, d);
+    rot(:, :, i) = normc(null_coordinate + avg_coordinate);
   end
 end
 
@@ -41,12 +45,11 @@ end
 for i = [1:S]
   x(:, :, i) = rot(:, :, i) * u(:, :, i)';
 end
+x = reshape(x, size(x, 1), size(x, 2) * size(x, 3));
 
 % Add noise
 if noise > 0
-  mean = zeros(D, 1);
-  sigma = eye(D)*noise;
-  for i = [1:S]
-    x(:, :, i) += mvnrnd(mean, sigma, n)';
-  end
+    mean = zeros(D, 1);
+    sigma = eye(D)*noise;
+    x = x + mvnrnd(mean, sigma, size(x, 2))';
 end

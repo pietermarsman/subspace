@@ -1,8 +1,8 @@
 hull_size = [];
 labels = {};
 iter_n = 1;
-ns = [10000:10000:50000];
-ds = [2:8];
+ns = [10000:10000:40000];
+ds = [2:6];
 for n = ns
   iter_d = 1;
   for d = ds
