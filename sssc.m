@@ -2,7 +2,7 @@ function [ P_label, Tr_idx, Tt_idx ] = sssc( data, landmark_no, n, lambda, toler
 %SSSC Summary of this function goes here
 %   Detailed explanation goes here
 
-par.lambda = lambdaZz;
+par.lambda = lambda;
 par.tolerance = tolerance;
 par.maxIteration = 5000;
 par.isNonnegative = nonNegative;
