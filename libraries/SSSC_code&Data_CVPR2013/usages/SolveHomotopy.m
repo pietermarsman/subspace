@@ -367,7 +367,7 @@ if isempty(delta2)
     delta2 = inf;
 end
 
-if delta1>=delta2
+if delta1>delta2
     delta = delta2;
     i_delta = gamma_lc(delta2_pos_ind(i_delta2));
 else

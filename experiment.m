@@ -86,6 +86,7 @@ end
 % SSSC
 for reps = pReps
     fprintf('SSSC(rep=%d), ', reps); tic;
+    size(x), reps, n, ssLambda, ssTolerance, nonNegative
     [pred(iter, :), ~, ~] = sssc(x, reps, n, ssLambda, ssTolerance, nonNegative);
     err(iter) = Misclassification(pred(iter, :)', labels);
     dur(iter) = toc;
