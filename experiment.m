@@ -74,7 +74,7 @@ for a = rAlphas
     % Missrate rssc with ssc of representatives
     if useMix
         fprintf('mix; '); tic;
-        [~, rSGrps] = SSC(rInX, sR, sAffine, sAlpha, sOutlier, sRho, n);
+        [~, rSGrps] = SSC(rInX, sR, sAffine, sAlpha, sOutlier, sRho, min(n, length(rRep)));
         pred(iter, :) = InOutSample(rInX, rOutX, rRep, rNotRep, rSGrps);
         err(iter) = Misclassification(pred(iter, :)', labels);
         dur(iter) = toc + rssc_duration;

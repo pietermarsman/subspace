@@ -33,7 +33,7 @@ else
 end
 
 % Parameters
-sAlphas = 1:1:20;
+sAlphas = 1:1:1;
 rAlphas = 1:1:20;
 hAlphas = 1:1:20;
 hMaxReps = (d+1) * n * [.5:.5:9];
@@ -46,7 +46,7 @@ fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
 
 names = {'ssc', 'sssc', 'hssc', 'rssc'};
 
-for i = [1:repeats]
+parfor i = [1:repeats]
     
     fprintf('Experiment %d: ', i)
     
