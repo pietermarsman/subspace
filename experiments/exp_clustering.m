@@ -2,10 +2,14 @@ clear all;
 close all;
 clc;
 
+folder = ['data/'];
+mkdir(folder);
 exp_name = ['all_', char(datetime('now', 'Format', 'yyyyMMddHHmmss'))];
-repeats = 1;
+diary(['data/', exp_name, '.txt']);
+
+repeats = 50;
 dataset = 2;
-n = 2;
+n = 10;
 
 % Dataset
 if dataset == 1
@@ -29,11 +33,13 @@ else
 end
 
 % Parameters
-sAlphas = 5;
-rAlphas = 18;
-hAlphas = 1:1:15;
-hMaxReps = (d+1) * n * [2];
-pReps = (d+1) * n * [2];
+sAlphas = 1:1:20;
+rAlphas = 1:1:20;
+hAlphas = 1:1:20;
+hMaxReps = (d+1) * n * [.5:.5:9];
+hMaxReps(hMaxReps > N) = [];
+pReps = (d+1) * n * [.5:.5:9];
+pReps(pReps > N) = [];
 
 fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
     repeats, N, n, d, D, noise)
@@ -59,8 +65,4 @@ for i = [1:repeats]
         
     fprintf('\n')
 end
-folder = ['data/', exp_name];
-mkdir(folder);
-save([folder, '/dur.mat'], 'dur')
-save([folder, '/err.mat'], 'err')
-save([folder, '/pred.mat'], 'pred')
+save([folder, '/', exp_name, '.mat'], 'dur', 'err', 'pred')
