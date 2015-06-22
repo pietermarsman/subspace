@@ -63,7 +63,7 @@ for a = rAlphas
     if useRep
         fprintf('rep,'); tic;
         [rCSym, ~] = BuildAdjacency(rC(rRep, rRep), sK);
-        rRepGrps = SpectralClustering(rCSym, n);
+        rRepGrps = SpectralClustering(rCSym, min(n, length(rRep)));
         pred(iter, :) = InOutSample(rInX, rOutX, rRep, rNotRep, rRepGrps);
         err(iter) = Misclassification(pred(iter, :)', labels);
         dur(iter) = toc + rssc_duration;
@@ -122,7 +122,7 @@ for a = hAlphas
         if useRep
             fprintf('rep,'); tic;
             [hRepCSym, ~] = BuildAdjacency(hC(hRep, hRep), sK);
-            hRepGrps = SpectralClustering(hRepCSym, n);
+            hRepGrps = SpectralClustering(hRepCSym, min(n, length(hRep)));
             pred(iter, :) = InOutSample(hInX, hOutX, hRep, hNotRep, hRepGrps);
             err(iter) = Misclassification(pred(iter, :)', labels);
             dur(iter) = toc + hssc_duration;
@@ -133,10 +133,10 @@ for a = hAlphas
         % Missrate hssc with ssc of representatives
         if useMix
             fprintf('mix; '); tic;
-            [~, hSGrps] = SSC(hInX, sR, sAffine, sAlpha, sOutlier, sRho, n);
+            [~, hSGrps] = SSC(hInX, sR, sAffine, sAlpha, sOutlier, sRho, min(n, length(hRep)));
             pred(iter, :) = InOutSample(hInX, hOutX, hRep, hNotRep, hSGrps);
             err(iter) = Misclassification(pred(iter, :)', labels);
-            dur(iter) = toc + hssc_duration;
+            dur(iter) = toc + hssc_duration;20
             names{iter} = ['HSSC mix ', int2str(a), ' ', int2str(maxRep)];
             iter = iter + 1;
         end

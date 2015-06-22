@@ -46,7 +46,7 @@ fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
 
 names = {'ssc', 'sssc', 'hssc', 'rssc'};
 
-parfor i = [1:repeats]
+for i = [1:repeats]
     
     fprintf('Experiment %d: ', i)
     
