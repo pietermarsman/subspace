@@ -2,6 +2,7 @@ function [ err, dur, pred, names ] = experiment( x, labels, n, sAlphas, rAlphas,
 %EXPERIMENT Summary of this function goes here
 %   Detailed explanation goes here
 
+verbose = false;
 useAll = false;
 useRep = false;
 useMix = true;
@@ -64,7 +65,7 @@ for a = rAlphas
         fprintf('rep,'); tic;
         [rCSym, ~] = BuildAdjacency(rC(rRep, rRep), sK);
         rRepGrps = SpectralClustering(rCSym, min(n, length(rRep)));
-        pred(iter, :) = InOutSample(rInX, rOutX, rRep, rNotRep, rRepGrps);
+        pred(iter, :) = InOutSample(rInX, rOutX, rRep, rNotRep, rRepGrps, verbose);
         err(iter) = Misclassification(pred(iter, :)', labels);
         dur(iter) = toc + rssc_duration;
         names{iter} = ['RSSC rep ', int2str(a)];
@@ -75,7 +76,7 @@ for a = rAlphas
     if useMix
         fprintf('mix; '); tic;
         [~, rSGrps] = SSC(rInX, sR, sAffine, sAlpha, sOutlier, sRho, min(n, length(rRep)));
-        pred(iter, :) = InOutSample(rInX, rOutX, rRep, rNotRep, rSGrps);
+        pred(iter, :) = InOutSample(rInX, rOutX, rRep, rNotRep, rSGrps, verbose);
         err(iter) = Misclassification(pred(iter, :)', labels);
         dur(iter) = toc + rssc_duration;
         names{iter} = ['RSSC mix ', int2str(a)];
@@ -97,7 +98,7 @@ end
 for a = hAlphas
     for maxRep = hMaxReps
         fprintf('HSSC(a=%d,reps=%d):', a, maxRep); tic;
-        [hRep, hC] = hssc(x, a, maxRep);
+        [hRep, hC] = hssc(x, a, maxRep, verbose);
         if nonNegative
             hC(hC < 0) = 0;
         end
@@ -123,7 +124,7 @@ for a = hAlphas
             fprintf('rep,'); tic;
             [hRepCSym, ~] = BuildAdjacency(hC(hRep, hRep), sK);
             hRepGrps = SpectralClustering(hRepCSym, min(n, length(hRep)));
-            pred(iter, :) = InOutSample(hInX, hOutX, hRep, hNotRep, hRepGrps);
+            pred(iter, :) = InOutSample(hInX, hOutX, hRep, hNotRep, hRepGrps, verbose);
             err(iter) = Misclassification(pred(iter, :)', labels);
             dur(iter) = toc + hssc_duration;
             names{iter} = ['HSSC rep ', int2str(a), ' ', int2str(maxRep)];
@@ -134,7 +135,7 @@ for a = hAlphas
         if useMix
             fprintf('mix; '); tic;
             [~, hSGrps] = SSC(hInX, sR, sAffine, sAlpha, sOutlier, sRho, min(n, length(hRep)));
-            pred(iter, :) = InOutSample(hInX, hOutX, hRep, hNotRep, hSGrps);
+            pred(iter, :) = InOutSample(hInX, hOutX, hRep, hNotRep, hSGrps, verbose);
             err(iter) = Misclassification(pred(iter, :)', labels);
             dur(iter) = toc + hssc_duration;
             names{iter} = ['HSSC mix ', int2str(a), ' ', int2str(maxRep)];
@@ -146,14 +147,16 @@ end
 
 end
 
-function [labels] = InOutSample(InX, OutX, InIdx, OutIdx, InLabels)
+function [labels] = InOutSample(InX, OutX, InIdx, OutIdx, InLabels, verbose)
 
 labels = [];
 if size(OutX, 2) > 0
     OutLabels = OutSample(InX, OutX, InLabels);
     labels([InIdx, OutIdx]) = [InLabels', OutLabels];
 else
-    warning('All datapoints are representatives')
+    if verbose
+        warning('All datapoints are representatives')
+    end
     labels(InIdx) = InLabels';
 end
 

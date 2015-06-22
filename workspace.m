@@ -3,7 +3,6 @@ close all;
 clc;
 
 !synclient HorizTwoFingerScroll=0
-warning off
  
 addpath('experiments')
 addpath('fig')

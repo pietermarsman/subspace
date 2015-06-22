@@ -1,4 +1,4 @@
-function [ repInd, C ] = hssc( Y, alpha, max_rep )
+function [ repInd, C ] = hssc( Y, alpha, max_rep, verbose )
 %HSSC Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -22,7 +22,9 @@ for i = [1:subsets]
 end
 
 if size(hssc_repInd, 2) >= size(Y, 2)
-    warning(sprintf('Could not reduce number of representatives. Please choose a higher alpha.\nSize Y: %g', size(Y, 2)))
+    if verbose
+        warning(sprintf('Could not reduce number of representatives. Please choose a higher alpha.\nSize Y: %g', size(Y, 2)))
+    end
     repInd = hssc_repInd;
     C = hssc_C;
 elseif size(hssc_repInd, 2) > max_rep
