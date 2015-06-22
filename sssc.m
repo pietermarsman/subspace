@@ -1,11 +1,11 @@
-function [ P_label, Tr_idx, Tt_idx ] = sssc( data, landmark_no, n)
+function [ P_label, Tr_idx, Tt_idx ] = sssc( data, landmark_no, n, lambda, tolerance, nonNegative)
 %SSSC Summary of this function goes here
 %   Detailed explanation goes here
 
-par.lambda = 1e-7;
-par.tolerance = 0.001;
+par.lambda = lambdaZz;
+par.tolerance = tolerance;
 par.maxIteration = 5000;
-par.isNonnegative = true;
+par.isNonnegative = nonNegative;
 
 idx = randperm(size(data, 2));
 Tr_idx = idx(1:landmark_no);

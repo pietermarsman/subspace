@@ -45,8 +45,7 @@ for i = [1:repeats]
         labels = a.s{10}(idx);
     end
     
-    
-
+    % Todo: save data
 end
 
 close all;
