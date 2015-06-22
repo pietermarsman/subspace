@@ -2,6 +2,8 @@ clear all;
 close all;
 clc;
 
+!synclient HorizTwoFingerScroll=0
+ 
 addpath('experiments')
 addpath('fig')
 addpath('misc')
