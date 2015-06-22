@@ -86,7 +86,6 @@ end
 % SSSC
 for reps = pReps
     fprintf('SSSC(rep=%d), ', reps); tic;
-    size(x), reps, n, ssLambda, ssTolerance, nonNegative
     [pred(iter, :), ~, ~] = sssc(x, reps, n, ssLambda, ssTolerance, nonNegative);
     err(iter) = Misclassification(pred(iter, :)', labels);
     dur(iter) = toc;
@@ -137,7 +136,7 @@ for a = hAlphas
             [~, hSGrps] = SSC(hInX, sR, sAffine, sAlpha, sOutlier, sRho, min(n, length(hRep)));
             pred(iter, :) = InOutSample(hInX, hOutX, hRep, hNotRep, hSGrps);
             err(iter) = Misclassification(pred(iter, :)', labels);
-            dur(iter) = toc + hssc_duration;20
+            dur(iter) = toc + hssc_duration;
             names{iter} = ['HSSC mix ', int2str(a), ' ', int2str(maxRep)];
             iter = iter + 1;
         end

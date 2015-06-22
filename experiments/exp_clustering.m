@@ -33,12 +33,12 @@ else
 end
 
 % Parameters
-sAlphas = 1:1:1;
-rAlphas = 1:1:1;
-hAlphas = 1:1:1;
-hMaxReps = (d+1) * n * [.5:.5:1];
+sAlphas = 1:1:20;
+rAlphas = 1:1:20;
+hAlphas = 1:1:20;
+hMaxReps = (d+1) * n * [1:.5:9];
 hMaxReps(hMaxReps > N) = [];
-pReps = (d+1) * n * [1:.5:4];
+pReps = (d+1) * n * [];
 pReps(pReps > N) = [];
 
 fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
