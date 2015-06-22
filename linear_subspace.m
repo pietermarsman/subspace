@@ -1,4 +1,4 @@
-function [u, rot, x] = linear_subspace(N, d, S, D, cos_theta, noise)
+function [u, rot, x, labels] = linear_subspace(N, d, S, D, cos_theta, noise)
 
 isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
 if isOctave
@@ -6,11 +6,14 @@ if isOctave
 end
 
 % generate underlying structure
+actual_N = round(N / 3);
 u = [];
+labels = [];
 mean = zeros(d, 1) + 5;
 for i=[1:S]
   sigma = diag(flipud(cumsum(rand(d, 1))));
-  u(:, :, i) = mvnrnd(mean, sigma, round(N / 3));
+  u(:, :, i) = mvnrnd(mean, sigma, actual_N);
+  labels = [labels, repmat(i, 1, actual_N)];
 end
 
 % generate rotation

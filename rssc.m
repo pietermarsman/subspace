@@ -17,7 +17,7 @@ regParam = [alpha alpha];
 affine = false;
 thr = 1 * 10^-7;
 maxIter = 5000;
-thrS = 0.9;
+thrS = 0.9999;
 thrP = 0.95;
 N = size(Y,2);
 

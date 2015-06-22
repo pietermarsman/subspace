@@ -1,11 +1,10 @@
-function [ repInd, C ] = hssc( Y, alpha, s )
+function [ repInd, C ] = hssc( Y, alpha, max_rep )
 %HSSC Summary of this function goes here
 %   Detailed explanation goes here
 
-max_rep_ind_size = 50;
 N = size(Y, 2);
 idx = randperm(N, N);
-subsets = ceil(N / s);
+subsets = 2; % ceil(N / s);
 s = N / subsets;
 
 repInd = [];
@@ -22,13 +21,15 @@ for i = [1:subsets]
     hssc_C(subset_idx, subset_idx) = subset_C;
 end
 
-if size(hssc_repInd, 2) > max_rep_ind_size
-    disp 'repeat'
-    [repInd2, C2_] = hssc(Y(:, hssc_repInd), alpha, s);
+if size(hssc_repInd, 2) >= size(Y, 2)
+    warning(sprintf('Could not reduce number of representatives. Please choose a higher alpha.\nSize Y: %g', size(Y)))
+    repInd = hssc_repInd;
+    C = hssc_C;
+elseif size(hssc_repInd, 2) > max_rep
+    [repInd2, C2_] = hssc(Y(:, hssc_repInd), alpha, max_rep);
     C(hssc_repInd, :) = C2_ * hssc_C(hssc_repInd, :);
     repInd = hssc_repInd(repInd2);
 else
-    disp 'done'
     repInd = hssc_repInd;
     C = hssc_C;
 end
