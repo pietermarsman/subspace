@@ -9,7 +9,7 @@ diary(['data/', exp_name, '.txt']);
 
 repeats = 50;
 dataset = 2;
-n = 10;
+n = 2;
 
 % Dataset
 if dataset == 1
@@ -34,11 +34,11 @@ end
 
 % Parameters
 sAlphas = 1:1:1;
-rAlphas = 1:1:20;
-hAlphas = 1:1:20;
-hMaxReps = (d+1) * n * [.5:.5:9];
+rAlphas = 1:1:1;
+hAlphas = 1:1:1;
+hMaxReps = (d+1) * n * [.5:.5:1];
 hMaxReps(hMaxReps > N) = [];
-pReps = (d+1) * n * [.5:.5:9];
+pReps = (d+1) * n * [1:.5:4];
 pReps(pReps > N) = [];
 
 fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
