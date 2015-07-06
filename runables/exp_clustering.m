@@ -33,11 +33,13 @@ else
 end
 
 % Parameters
-sAlphas = 12:2:20;
-rAlphas = 5:2:20;
-hAlphas = 4:2:20;
-reps = (d+1) * n * [1:2:5];
+sAlphas = 15;
+rAlphas = 15;
+hAlphas = 2:2:40;
+reps = (d+1) * n * [2];
 reps(reps > N) = [];
+pLambda = [1e-7, 1e-6, 1e-5];
+pTol = [1e-3, 1e-2, 1e-1];
 
 fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
     repeats, N, n, d, D, noise)
@@ -52,7 +54,7 @@ parfor i = [1:repeats]
             x = yaleX;
             labels = yaleLabels;
         end
-        [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, reps, reps);
+        [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, reps, reps, pLambda, pTol);
     catch E
         warning(getReport(E))
     end
@@ -60,4 +62,4 @@ parfor i = [1:repeats]
     fprintf('\n')
 end
 names = names{1};
-save([folder, '/', exp_name, '.mat'], 'dur', 'err', 'pred', 'names')
+save([folder, '/', exp_name, '.mat'], 'err', 'mut', 'dur', 'pred', 'names')
