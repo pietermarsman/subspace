@@ -11,7 +11,7 @@ u = [];
 labels = [];
 mean = zeros(d, 1) + 5;
 for i=[1:S]
-    sigma = diag(flipud(cumsum(rand(d, 1))));
+    sigma = diag(flipud(sort(rand(d, 1))));
     u(:, :, i) = mvnrnd(mean, sigma, actual_N)';
     labels = [labels, repmat(i, 1, actual_N)];
 end
