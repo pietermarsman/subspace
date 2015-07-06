@@ -9,7 +9,7 @@ end
 actual_N = round(N / S);
 u = [];
 labels = [];
-mean = zeros(d, 1) + 1;
+mean = zeros(d, 1) + 5;
 for i=[1:S]
     sigma = diag(flipud(cumsum(rand(d, 1))));
     u(:, :, i) = mvnrnd(mean, sigma, actual_N)';

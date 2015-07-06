@@ -14,7 +14,7 @@ n = 3; % subspaces
 % Dataset
 if dataset == 1
     N = 500;
-    noise = 0.1;
+    noise = 0.3;
     d = 10;
     D = 1000;
     cos = 0.5;
@@ -33,24 +33,18 @@ else
 end
 
 % Parameters
-sAlphas = 7:2:20;
+sAlphas = 8:2:20;
 rAlphas = 5:2:20;
 hAlphas = 4:2:20;
-hMaxReps = (d+1) * n * [1:2:9];
-hMaxReps(hMaxReps > N) = [];
-pReps = (d+1) * n * [1:2:9];
-pReps(pReps > N) = [];
+reps = (d+1) * n * [1:2:5];
+reps(reps > N) = [];
 
 fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
     repeats, N, n, d, D, noise)
 
-names = {'ssc', 'sssc', 'hssc', 'rssc'};
-
 warning('off', 'MATLAB:mir_warning_maybe_uninitialized_temporary')
 parfor i = [1:repeats]
-    
     fprintf('Experiment %d: ', i)
-    
     try
         if dataset == 1
             [~, ~, x, labels] = linear_subspace(N, d, n, D, cos, noise);
@@ -58,13 +52,7 @@ parfor i = [1:repeats]
             x = yaleX;
             labels = yaleLabels;
         end
-
-        [expErr, expMut, expDur, expPred, names] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, hMaxReps, pReps);
-
-        err(:, i) = expErr;
-        mut(:, i) = expMut;
-        dur(:, i) = expDur;
-        pred(:, :, i) = expPred;
+        [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), names] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, reps, reps);
     catch E
         warning(getReport(E))
     end
