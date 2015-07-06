@@ -46,23 +46,28 @@ fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
 
 names = {'ssc', 'sssc', 'hssc', 'rssc'};
 
+warning('off', 'MATLAB:mir_warning_maybe_uninitialized_temporary')
 parfor i = [1:repeats]
     
     fprintf('Experiment %d: ', i)
     
-    if dataset == 1
-        [~, ~, x, labels] = linear_subspace(N, d, n, D, cos, noise);
-    elseif dataset == 2
-        x = yaleX;
-        labels = yaleLabels;
+    try
+        if dataset == 1
+            [~, ~, x, labels] = linear_subspace(N, d, n, D, cos, noise);
+        elseif dataset == 2
+            x = yaleX;
+            labels = yaleLabels;
+        end
+
+        [expErr, expMut, expDur, expPred, names] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, hMaxReps, pReps);
+
+        err(:, i) = expErr;
+        mut(:, i) = expMut;
+        dur(:, i) = expDur;
+        pred(:, :, i) = expPred;
+    catch E
+        warning(E)
     end
-    
-    [expErr, expMut, expDur, expPred, names] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, hMaxReps, pReps);
-    
-    err(:, i) = expErr;
-    mut(:, i) = expMut;
-    dur(:, i) = expDur;
-    pred(:, :, i) = expPred;
         
     fprintf('\n')
 end
