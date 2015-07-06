@@ -33,7 +33,7 @@ else
 end
 
 % Parameters
-sAlphas = 8:2:20;
+sAlphas = 12:2:20;
 rAlphas = 5:2:20;
 hAlphas = 4:2:20;
 reps = (d+1) * n * [1:2:5];
@@ -43,6 +43,7 @@ fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
     repeats, N, n, d, D, noise)
 
 warning('off', 'MATLAB:mir_warning_maybe_uninitialized_temporary')
+names = {};
 parfor i = [1:repeats]
     fprintf('Experiment %d: ', i)
     try
@@ -52,11 +53,11 @@ parfor i = [1:repeats]
             x = yaleX;
             labels = yaleLabels;
         end
-        [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), names] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, reps, reps);
+        [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), names(i, :)] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, reps, reps);
     catch E
         warning(getReport(E))
     end
         
     fprintf('\n')
 end
-save([folder, '/', exp_name, '.mat'], 'dur', 'err', 'pred')
+save([folder, '/', exp_name, '.mat'], 'dur', 'err', 'pred', 'names')
