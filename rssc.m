@@ -15,7 +15,7 @@ end
 q = 2;
 regParam = [alpha alpha];
 affine = false;
-thr = 1 * 10^-7;
+thr =  1e-7;
 maxIter = 5000;
 thrS = 0.9999;
 thrP = 0.95;

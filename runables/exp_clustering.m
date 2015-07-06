@@ -7,13 +7,13 @@ mkdir(folder);
 exp_name = ['all_', char(datetime('now', 'Format', 'yyyyMMddHHmmss'))];
 diary(['data/', exp_name, '.txt']);
 
-repeats = 10;
+repeats = 1;
 dataset = 1;
 n = 3; % subspaces
 
 % Dataset
 if dataset == 1
-    N = 500;
+    N = 100;
     noise = 0.1;
     d = 10;
     D = 1000;

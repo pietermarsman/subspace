@@ -96,13 +96,14 @@ end
 for reps = pReps
     for tol = pTol
         for lambda = pLambda
-            fprintf('SSSC(rep=%d,t=%d,l=%d), ', reps);
+            name = sprintf('SSSC(rep=%d,t=%d,l=%d)', reps, tol, lambda);
+            fprintf([name, ', ']);
             tic;
             [pred(iter, :), ~, ~] = sssc(x, reps, n, lambda, tol, nonNegative);
             dur(iter) = toc;
             err(iter) = Misclassification(pred(iter, :)', labels);
             mut(iter) = MutualInfo(pred(iter, :), labels);
-            names{iter} = ['SSSC ', int2str(reps)];
+            names{iter} = name;
             iter = iter + 1;
         end
     end

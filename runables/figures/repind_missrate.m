@@ -1,13 +1,16 @@
+clear all;
+
 duration = [];
 performance = [];
-i = 1;
 N = 500;
-d = 2;
+d = 10;
 S = 3;
-D = 20;
+D = 1000;
 cos_theta = .5;
-noise = 0.1;
+noise = 0.0001;
+
 alpha = 5;
+max_rep = N / 2;
 H = 2;
 subset_size = N / H;
 repeats = 2;
@@ -19,13 +22,12 @@ fprintf('Repeat ');
 for j = [1:repeats]
     fprintf('%d ', j);
     [u, rot, x, ~] = linear_subspace(N, d, S, D, cos_theta, noise);
-    tic; [rssc_repInd, rssc_C] = rssc(x, 5, 0, false);
-    duration(i, 1) = toc;
-    tic; [hssc_repInd, hssc_C] = hssc(x, 5, 50, verbose); 
-    duration(i, 2) = toc;
-    performance(i) = size(intersect(rssc_repInd, hssc_repInd)) / size(rssc_repInd);
-    i = i + 1;
-
+    tic; [rssc_repInd, rssc_C] = rssc(x, alpha, 0, false);
+    duration(j, 1) = toc;
+    tic; [hssc_repInd, hssc_C] = hssc(x, alpha, max_rep, verbose); 
+    duration(j, 2) = toc;
+    performance(j) = size(intersect(rssc_repInd, hssc_repInd)) / size(rssc_repInd);
+    
     k = 1;
     for id = rssc_repInd
         missing = sum(hssc_repInd == id) == 0;
