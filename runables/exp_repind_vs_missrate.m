@@ -1,22 +1,20 @@
 duration = [];
 performance = [];
 i = 1;
-N = 200;
+N = 500;
 d = 2;
 S = 3;
 D = 20;
 cos_theta = .5;
 noise = 0.1;
 alpha = 5;
-subset_size = 50;
-repeats = 10;
+H = 2;
+subset_size = N / H;
+repeats = 2;
 
 idx_missing = [];
 verbose = false;
 fprintf('Repeat ');
-
-[~, ~, x, ~] = linear_subspace(N, 1, 3, 3, cos_theta, noise);
-scatter3(x(1, :), x(2, :), x(3, :));
 
 for j = [1:repeats]
     fprintf('%d ', j);
@@ -37,6 +35,7 @@ for j = [1:repeats]
 end
 fprintf('\n');
 
+figure(2)
 bars = [];
 std_bars = [];
 range = [0.1:0.1:1.0];
@@ -47,10 +46,15 @@ for to = range
     std_bars = [std_bars, std(idx_missing(idx, 2))];
 end
 hold on
-plot(range, bars, 'b')
+plot(range, bars, 'b');
 plot(range, bars+std_bars, 'b--')
-legend('mean', 'mean+std', 'Location', 'southeast')
-xlabel('RSSC repInd place')
-ylabel('Part not found')
-suptitle('Part of the representatives not found by HSSC')
-title(sprintf('N=%d, d=%d, S=%d, D=%d, cos=%d, noise=%d, alpha=%d, s=%d, repeats=%d', N, d, S, D, cos_theta, noise, alpha, subset_size, repeats))
+ylim([0, 1]);
+suptitle('Part of the representatives not found by HSSC');
+title(sprintf('N=%d, d=%d, S=%d, D=%d, cos=%.1f, noise=%.1f, H=%d, repeats=%d', N, d, S, D, cos_theta, noise, H, repeats));
+beautyplot('RSSC repInd place', 'Part not found', '', false);
+
+dir = 'fig';
+name = [dir, '/repind'];
+mkdir dir;
+savefig(name)
+export_fig(name, '-pdf', '-transparent')

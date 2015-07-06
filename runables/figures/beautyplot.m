@@ -1,13 +1,15 @@
-function [  ] = beautyplot( xlab, ylab, zlab  )
+function [  ] = beautyplot( xlab, ylab, zlab, rmTicks  )
 %BEAUTYPLOT Summary of this function goes here
 %   Detailed explanation goes here
 
 axis equal;
 axis square;
 
-set(gca,'YTickLabel',[]);
-set(gca, 'XTickLabel', []);
-set(gca, 'ZTickLabel', []);
+if rmTicks
+    set(gca,'YTickLabel',[]);
+    set(gca, 'XTickLabel', []);
+    set(gca, 'ZTickLabel', []);
+end
 
 xlab = xlabel(xlab);
 ylab = ylabel(ylab);
