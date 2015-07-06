@@ -14,7 +14,7 @@ n = 3; % subspaces
 % Dataset
 if dataset == 1
     N = 500;
-    noise = 0.1;
+    noise = 0.05;
     d = 10;
     D = 1000;
     cos = 0.5;
