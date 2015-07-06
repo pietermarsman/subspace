@@ -1,24 +1,29 @@
 duration = [];
 performance = [];
 i = 1;
-N = 250
-d = 2
-S = 3
-D = 20
-cos_theta = .5
-noise = 0.0
-alpha = 5
-subset_size = 50
-repeats = 200;
+N = 200;
+d = 2;
+S = 3;
+D = 20;
+cos_theta = .5;
+noise = 0.1;
+alpha = 5;
+subset_size = 50;
+repeats = 10;
 
 idx_missing = [];
+verbose = false;
+fprintf('Repeat ');
+
+[~, ~, x, ~] = linear_subspace(N, 1, 3, 3, cos_theta, noise);
+scatter3(x(1, :), x(2, :), x(3, :));
 
 for j = [1:repeats]
-    disp(j);
-    [u, rot, x] = linear_subspace(N, 2, 3, 20, .5, 1.0);
+    fprintf('%d ', j);
+    [u, rot, x, ~] = linear_subspace(N, d, S, D, cos_theta, noise);
     tic; [rssc_repInd, rssc_C] = rssc(x, 5, 0, false);
     duration(i, 1) = toc;
-    tic; [hssc_repInd, hssc_C] = hssc(x, 5, 50); 
+    tic; [hssc_repInd, hssc_C] = hssc(x, 5, 50, verbose); 
     duration(i, 2) = toc;
     performance(i) = size(intersect(rssc_repInd, hssc_repInd)) / size(rssc_repInd);
     i = i + 1;
@@ -30,6 +35,7 @@ for j = [1:repeats]
         k = k + 1;
     end
 end
+fprintf('\n');
 
 bars = [];
 std_bars = [];
@@ -41,7 +47,7 @@ for to = range
     std_bars = [std_bars, std(idx_missing(idx, 2))];
 end
 hold on
-plot(range, bars)
+plot(range, bars, 'b')
 plot(range, bars+std_bars, 'b--')
 legend('mean', 'mean+std', 'Location', 'southeast')
 xlabel('RSSC repInd place')

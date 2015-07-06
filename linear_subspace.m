@@ -9,10 +9,8 @@ end
 actual_N = round(N / S);
 u = [];
 labels = [];
-mean = zeros(d, 1) + 5;
 for i=[1:S]
-    sigma = diag(flipud(sort(rand(d, 1))));
-    u(:, :, i) = mvnrnd(mean, sigma, actual_N)';
+    u(:, :, i) = rand(d, actual_N);
     labels = [labels, repmat(i, 1, actual_N)];
 end
 
