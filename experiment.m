@@ -2,7 +2,7 @@ function [ err, mut, dur, pred, names ] = experiment( x, labels, n, sAlphas, rAl
 %EXPERIMENT Summary of this function goes here
 %   Detailed explanation goes here
 
-verbose = false;
+verbose = true;
 useAll = false;
 useRep = false;
 useMix = true;
@@ -96,7 +96,7 @@ end
 for reps = pReps
     for tol = pTol
         for lambda = pLambda
-            name = sprintf('SSSC(rep=%d,t=%d,l=%d)', reps, tol, lambda);
+            name = sprintf('SSSC(rep=%d,t=%.1d,l=%.1d)', reps, tol, lambda);
             fprintf([name, ', ']);
             tic;
             [pred(iter, :), ~, ~] = sssc(x, reps, n, lambda, tol, nonNegative);

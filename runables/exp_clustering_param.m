@@ -33,11 +33,11 @@ else
 end
 
 % Parameters
-sAlphas = 15;
-rAlphas = 15;
-hAlphas = 2:2:40;
-reps = (d+1) * n * [2];
-reps(reps > N) = [];
+sAlphas = 10:20;
+rAlphas = 10:20;
+hAlphas = 2:1:40;
+reps = (d+1) * n * [1:.5:5];
+reps(reps > N / 2) = [];
 pLambda = [1e-7, 1e-6, 1e-5];
 pTol = [1e-3, 1e-2, 1e-1];
 
