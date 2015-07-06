@@ -23,13 +23,13 @@ sAlpha = 20; % default ssc alpha
 sOutlier = false; % if there are outliers
 sRho = 1; % coefficient threshold
 sK = 0; % number of strongest coefficients to keep
-nonNegative = true;
+nonNegative = false;
 
 % SSC
 for a = sAlphas
     fprintf('SSC(a=%d), ', a); 
     tic;
-    [~, pred(iter, :)] = SSC(x, sR, sAffine, a, sOutlier, sRho, n);
+    [C, pred(iter, :)] = SSC(x, sR, sAffine, a, sOutlier, sRho, n);
     dur(iter) = toc;
     err(iter) = Misclassification(pred(iter, :)', labels);
     mut(iter) = MutualInfo(pred(iter, :), labels);

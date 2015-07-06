@@ -31,8 +31,9 @@ end
 C = almLasso_mat_func(Y,affine,regParam,q,thr,maxIter,verbose);
 
 % Always return all indices
-repInd = findRep(C,thrS,q);
-%repInd = rmRep(sInd,Y,thrP);
+sInd = findRep(C,thrS,q);
+% repInd = rmRep(sInd,Y,thrP);
+repInd = sInd;
 
 end
 
