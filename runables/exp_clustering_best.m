@@ -7,7 +7,7 @@ mkdir(folder);
 exp_name = ['all_', char(datetime('now', 'Format', 'yyyyMMddHHmmss'))];
 diary(['data/', exp_name, '.txt']);
 
-repeats = 1;
+repeats = 4;
 dataset = 2;
 n = 3; % subspaces
 
@@ -35,7 +35,7 @@ end
 % Parameters
 sAlphas = 15;
 rAlphas = 15;
-hAlphas = 10:20;
+hAlphas = 2:2:40;
 reps = (d+1) * n * 2;
 reps(reps > N / 2) = [];
 pLambda = 1e-6;
