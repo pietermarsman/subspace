@@ -8,7 +8,7 @@ for n = ns
   for d = ds
     sprintf('N=%d, d=%d\n', n, d)
     x = linear_subspace(n, d, 1, 20, 0.0, 0.0);
-    h = convhulln(x);
+    h = convhulln(x');
     hull_size(iter_n, iter_d) = size(unique(h), 1);
     iter_d = iter_d + 1;
   end

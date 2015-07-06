@@ -28,7 +28,7 @@ if size(hssc_repInd, 2) >= size(Y, 2)
     repInd = hssc_repInd;
     C = hssc_C;
 elseif size(hssc_repInd, 2) > max_rep
-    [repInd2, C2_] = hssc(Y(:, hssc_repInd), alpha, max_rep);
+    [repInd2, C2_] = hssc(Y(:, hssc_repInd), alpha, max_rep, verbose);
     C(hssc_repInd, :) = C2_ * hssc_C(hssc_repInd, :);
     repInd = hssc_repInd(repInd2);
 else

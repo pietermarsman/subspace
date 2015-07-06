@@ -7,17 +7,17 @@ mkdir(folder);
 exp_name = ['all_', char(datetime('now', 'Format', 'yyyyMMddHHmmss'))];
 diary(['data/', exp_name, '.txt']);
 
-repeats = 50;
-dataset = 2;
-n = 2;
+repeats = 10;
+dataset = 1;
+n = 3; % subspaces
 
 % Dataset
 if dataset == 1
     N = 500;
-    noise = 0.3;
+    noise = 0.1;
     d = 10;
-    D = 100;
-    cos = .5;
+    D = 1000;
+    cos = 0.5;
 elseif dataset == 2
     a = load('datasets/YaleBCrop025.mat');
     yaleIdx = find(a.s{10} <= n);
@@ -36,9 +36,9 @@ end
 sAlphas = 1:1:20;
 rAlphas = 1:1:20;
 hAlphas = 1:1:20;
-hMaxReps = (d+1) * n * [1:.5:9];
+hMaxReps = (d+1) * n * [1:9];
 hMaxReps(hMaxReps > N) = [];
-pReps = (d+1) * n * [];
+pReps = (d+1) * n * [1:9];
 pReps(pReps > N) = [];
 
 fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
@@ -46,7 +46,7 @@ fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
 
 names = {'ssc', 'sssc', 'hssc', 'rssc'};
 
-for i = [1:repeats]
+parfor i = [1:repeats]
     
     fprintf('Experiment %d: ', i)
     
@@ -57,9 +57,10 @@ for i = [1:repeats]
         labels = yaleLabels;
     end
     
-    [expErr, expDur, expPred, names] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, hMaxReps, pReps);
+    [expErr, expMut, expDur, expPred, names] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, hMaxReps, pReps);
     
     err(:, i) = expErr;
+    mut(:, i) = expMut;
     dur(:, i) = expDur;
     pred(:, :, i) = expPred;
         

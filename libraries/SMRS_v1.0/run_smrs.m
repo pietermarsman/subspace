@@ -32,14 +32,3 @@ verbose = false;
 % find the representatives via sparse modelling
 [repInd,C] = smrs(Y_shuffle,alpha,r,verbose);
 repInd = sort(repInd);
-
-% HSSC
-subsets = 3;
-reps = {};
-for subset_i = [1:subsets]
-    from_i = floor((subset_i-1) * N / subsets + 1);
-    to_i = ceil((subset_i) * N / subsets)
-    [reps(subset_i), _] = smrs(Y_shuffle(:, from_i:to_i),alpha*2,r,verbose);
-    reps{subset_i} += from_i - 1;
-    reps{subset_i} = sort(reps{subset_i});
-end
