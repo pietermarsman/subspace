@@ -2,10 +2,12 @@ function [ P_label, Tr_idx, Tt_idx ] = sssc( data, landmark_no, n, lambda, toler
 %SSSC Summary of this function goes here
 %   Detailed explanation goes here
 
+par.nClass = n;
+par = L1ParameterConfig(par);
 par.lambda = lambda;
 par.tolerance = tolerance;
-par.maxIteration = 5000;
-par.isNonnegative = nonNegative;
+par.landmarkNO = landmark_no;
+par.ndim = size(data, 1);
 
 idx = randperm(size(data, 2));
 Tr_idx = idx(1:landmark_no);

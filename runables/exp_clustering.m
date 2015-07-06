@@ -66,7 +66,7 @@ parfor i = [1:repeats]
         dur(:, i) = expDur;
         pred(:, :, i) = expPred;
     catch E
-        warning(E)
+        warning(getReport(E))
     end
         
     fprintf('\n')
