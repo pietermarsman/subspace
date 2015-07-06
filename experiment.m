@@ -1,4 +1,4 @@
-function [ err, mut, dur, pred, names ] = experiment( x, labels, n, sAlphas, rAlphas, hAlphas, hMaxReps, pReps )
+function [ err, mut, dur, pred, names ] = experiment( x, labels, n, sAlphas, rAlphas, hAlphas, hMaxReps, pReps, pLambda, pTol )
 %EXPERIMENT Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -23,8 +23,6 @@ sAlpha = 20; % default ssc alpha
 sOutlier = false; % if there are outliers
 sRho = 1; % coefficient threshold
 sK = 0; % number of strongest coefficients to keep
-pLambda = 1e-7;
-pTolerance = 0.001;
 nonNegative = true;
 
 % SSC
@@ -96,14 +94,18 @@ end
 
 % SSSC
 for reps = pReps
-    fprintf('SSSC(rep=%d), ', reps);
-    tic;
-    [pred(iter, :), ~, ~] = sssc(x, reps, n, pLambda, pTolerance, nonNegative);
-    dur(iter) = toc;
-    err(iter) = Misclassification(pred(iter, :)', labels);
-    mut(iter) = MutualInfo(pred(iter, :), labels);
-    names{iter} = ['SSSC ', int2str(reps)];
-    iter = iter + 1;
+    for tol = pTol
+        for lambda = pLambda
+            fprintf('SSSC(rep=%d,t=%d,l=%d), ', reps);
+            tic;
+            [pred(iter, :), ~, ~] = sssc(x, reps, n, lambda, tol, nonNegative);
+            dur(iter) = toc;
+            err(iter) = Misclassification(pred(iter, :)', labels);
+            mut(iter) = MutualInfo(pred(iter, :), labels);
+            names{iter} = ['SSSC ', int2str(reps)];
+            iter = iter + 1;
+        end
+    end
 end
 
 % HSSC
