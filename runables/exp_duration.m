@@ -23,6 +23,7 @@ subsets = repmat(subsets, 1, repeats);
 for i = 1:length(subsets)
     fprintf('Experiment %d: ', i)
     [ x, labels, N, d, n, D, noise, cos ] = get_data(dataset, subsets(i));
+    hReps = N;
     [err(:, i), mut(:, i), dur(:, i), ~, cs{i}, rep{i}, names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, hReps, pReps, pLambdas, pTols);
     fprintf('\n')
 end
