@@ -4,11 +4,11 @@ clc;
 
 folder = ['data/'];
 mkdir(folder);
-exp_name = ['all_', char(datetime('now', 'Format', 'yyyyMMddHHmmss'))];
+exp_name = ['all_', char(datetime('now', 'Format', 'yyyyMMddHHmmss'))]
 diary(['data/', exp_name, '.txt']);
-verbose = true;
+verbose = false;
 
-repeats = 1;
+repeats = 2;
 dataset = 2;
 
 % Dataset
@@ -21,7 +21,7 @@ if dataset == 1
     cos = 0.0;
 elseif dataset == 2
     load('datasets/YaleBCrop025.mat');
-    n = 2;
+    n = 10;
     N = size(Y, 2) * n;
     d = 11;
     D = size(Y, 1);
@@ -35,12 +35,12 @@ end
 
 % Parameters
 sAlphas = [5]; %2:20;
-rAlphas = [50:50:200]; %2:20;
+rAlphas = [5:5:100]; %2:20;
 hAlphas = []; %2:30;
-reps = [N]; %(d+1) * n * [2]; %[2:5];
-% reps(reps > N / 2) = [];
-pLambda = []; %[1e-7, 1e-6, 1e-5];
-pTol = [1e-3, 1e-2, 1e-1];
+reps = (d+1) * n * [1:10];
+reps(reps > N) = [];
+pLambda = [1e-6]; %[1e-7, 1e-6, 1e-5];
+pTol = [1e-2]; %[1e-3, 1e-2, 1e-1];
 
 fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
     repeats, N, n, d, D, noise)
@@ -57,7 +57,7 @@ for i = [1:repeats]
         end
         x = normc(x); % normalize datapoints
         
-        [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), cs{i}, rep{i}, names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, reps, reps, pLambda, pTol);
+        [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), cs{i}, rep{i}, names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, [N], reps, pLambda, pTol);
         if verbose
             fprintf('\nname\t error\t mut\t dur\t reps\n');
             for j = 1:length(names{1})
@@ -74,4 +74,4 @@ end
 names = names{1};
 save([folder, '/', exp_name, '.mat'], 'err', 'mut', 'dur', 'pred', 'names')
 
-post_process()
+close all;

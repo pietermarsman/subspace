@@ -1,4 +1,4 @@
-function [ err, mut, dur, pred, names ] = experiment( x, labels, n, sAlphas, rAlphas, hAlphas, hMaxReps, pReps, pLambda, pTol )
+function [ err, mut, dur, pred, cs, rep, names ] = experiment( x, labels, n, sAlphas, rAlphas, hAlphas, hMaxReps, pReps, pLambda, pTol )
 %EXPERIMENT Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -8,7 +8,7 @@ useRep = false;
 useMix = true;
 numUses = useAll + useRep + useMix; 
 
-nExp = length(sAlphas) + length(rAlphas) * numUses + length(hAlphas) * length(hMaxReps) * numUses + length(pReps);
+nExp = length(sAlphas) + length(rAlphas) * numUses + length(hAlphas) * length(hMaxReps) * numUses + length(pReps) * length(pLambda) * length(pTol);
 N = length(labels);
 err = zeros(nExp, 1);
 mut = zeros(nExp, 1);
@@ -19,11 +19,11 @@ iter = 1;
 % Constants
 sR = 0; % projection dimension
 sAffine = false;
-sAlpha = 20; % default ssc alpha
+sAlpha = 5; % default ssc alpha
 sOutlier = false; % if there are outliers
 sRho = 1; % coefficient threshold
 sK = 0; % number of strongest coefficients to keep
-nonNegative = false;
+nonNegative = true;
 
 % SSC
 for a = sAlphas
@@ -34,6 +34,7 @@ for a = sAlphas
     err(iter) = Misclassification(pred(iter, :)', labels);
     mut(iter) = MutualInfo(pred(iter, :), labels);
     names{iter} = ['SSC ', int2str(a)];
+    cs{iter} = C;
     iter = iter + 1;
 end
 
@@ -48,8 +49,10 @@ for a = rAlphas
     rNotRep = setdiff(1:size(x,2), rRep);
     rInX = x(:, rRep);
     rOutX = x(:, rNotRep);
-    rC = rC - diag(diag(rC));
+%     rC = rC - diag(diag(rC));
     rssc_duration = toc;
+    cs{iter} = rC;
+    rep{iter} = rRep;
     
     % Missrate rssc with all datapoints
     if useAll
@@ -82,7 +85,8 @@ for a = rAlphas
     if useMix
         fprintf('mix; '); 
         tic;
-        [~, rSGrps] = SSC(rInX, sR, sAffine, sAlpha, sOutlier, sRho, min(n, length(rRep)));
+        [cstar, rSGrps] = SSC(rInX, sR, sAffine, sAlpha, sOutlier, sRho, min(n, length(rRep)));
+        cs{iter} = cstar;
         pred(iter, :) = InOutSample(rInX, rOutX, rRep, rNotRep, rSGrps, verbose);
         dur(iter) = toc + rssc_duration;
         err(iter) = Misclassification(pred(iter, :)', labels);
@@ -99,11 +103,13 @@ for reps = pReps
             name = sprintf('SSSC(rep=%d,t=%.1d,l=%.1d)', reps, tol, lambda);
             fprintf([name, ', ']);
             tic;
-            [pred(iter, :), ~, ~] = sssc(x, reps, n, lambda, tol, nonNegative);
+            [pred(iter, :), reps, ~] = sssc(x, reps, n, lambda, tol, nonNegative);
             dur(iter) = toc;
             err(iter) = Misclassification(pred(iter, :)', labels);
             mut(iter) = MutualInfo(pred(iter, :), labels);
+            rep{iter} = reps;
             names{iter} = name;
+            
             iter = iter + 1;
         end
     end
@@ -123,6 +129,8 @@ for a = hAlphas
         hOutX = x(:, hNotRep);
         hC = hC - diag(diag(hC));
         hssc_duration = toc;
+        cs{iter} = hC;
+        rep{iter} = hRep;
 
         % Missrate hssc with all datapoints
         if useAll

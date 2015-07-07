@@ -22,12 +22,12 @@ for i = [1:S]
         rot(:, :, i) = q(:, 1:d);
     else
         all_rot = reshape(rot, size(rot, 1), []);
-        avg_rot = normc(sum(all_rot, 2));
+        avg_rot = normc(all_rot * rand(size(all_rot, 2), 1));
         nullspace = null(all_rot');
-        idx = randperm(size(nullspace, 2), d);
-        null_coordinate = sin(acos(cos_theta)) * log(d+1)/log(exp(1)) * nullspace(:, idx);
+        null_vec = nullspace * normc(rand(size(nullspace, 2), d));
+        null_coordinate = sin(acos(cos_theta)) * null_vec;
         avg_coordinate = cos_theta * repmat(avg_rot, 1, d);
-        rot(:, :, i) = normc(null_coordinate + avg_coordinate);
+        rot(:, :, i) = null_coordinate + avg_coordinate;
     end
 end
 
