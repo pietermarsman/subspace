@@ -4,7 +4,7 @@ clc;
 
 folder = ['data/'];
 mkdir(folder);
-exp_name = 'exp_rep_vs_err'
+exp_name = 'rep_vs_err'
 diary(['data/', exp_name, '.txt']);
 verbose = false;
 
@@ -46,7 +46,7 @@ fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
     repeats, N, n, d, D, noise)
 
 warning('off', 'MATLAB:mir_warning_maybe_uninitialized_temporary')
-for i = [1:repeats]
+parfor i = [1:repeats]
     fprintf('Experiment %d: ', i)
     try
         if dataset == 1
