@@ -4,7 +4,7 @@ clean;
 repeats = 20
 dataset = 2
 verbose = true
-subsets = 2
+subsets = 10
 params = {'rAlphas', [10:10:100], 'pReps', [10*subsets:10:2*64]};
 
 %% SETUP
