@@ -47,7 +47,7 @@ fprintf('%d Experiments with N=%d, n=%d, d=%d, D=%d\n', ...
     repeats, N, n, d, D)
 
 warning('off', 'MATLAB:mir_warning_maybe_uninitialized_temporary')
-for i = [1:length(noises)]
+parfor i = [1:length(noises)]
     fprintf('Experiment %d: ', i)
     try
         if dataset == 1
