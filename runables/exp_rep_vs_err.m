@@ -4,7 +4,7 @@ clc;
 
 folder = ['data/'];
 mkdir(folder);
-exp_name = ['all_', char(datetime('now', 'Format', 'yyyyMMddHHmmss'))]
+exp_name = 'exp_rep_vs_err'
 diary(['data/', exp_name, '.txt']);
 verbose = false;
 
@@ -72,6 +72,6 @@ for i = [1:repeats]
     fprintf('\n')
 end
 names = names{1};
-save([folder, '/', exp_name, '.mat'], 'err', 'mut', 'dur', 'pred', 'names')
+save([folder, '/', exp_name, '.mat'], 'err', 'mut', 'dur', 'pred', 'cs', 'rep', 'names')
 
 close all;

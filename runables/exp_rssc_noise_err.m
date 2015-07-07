@@ -8,7 +8,7 @@ exp_name = 'rssc_noise_vs_err'
 diary(['data/', exp_name, '.txt']);
 verbose = true;
 
-repeats = 20;
+repeats = 2;
 dataset = 1;
 
 % Dataset
@@ -34,7 +34,7 @@ end
 
 % Parameters
 sAlphas = [5]; %2:20;
-rAlphas = [5:5:100]; %2:20;
+rAlphas = [10:10:100]; %2:20;
 hAlphas = []; %2:30;
 reps = []; %(d+1) * n * [2]; %[2:5];
 % reps(reps > N / 2) = [];
@@ -66,6 +66,6 @@ parfor i = [1:length(noises)]
     fprintf('\n')
 end
 names = names{1};
-save([folder, '/', exp_name, '.mat'], 'err', 'mut', 'dur', 'pred', 'names', 'noises')
+save([folder, '/', exp_name, '.mat'], 'err', 'mut', 'dur', 'pred', 'cs', 'rep', 'names', 'noises')
 
 post_process()
