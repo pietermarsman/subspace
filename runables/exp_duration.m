@@ -4,7 +4,7 @@ clean;
 repeats = 1
 dataset = 2
 verbose = true
-subsets = [2:3]
+subsets = [2:10]
 params = {};
 
 %% SETUP
