@@ -7,7 +7,7 @@ p = inputParser;
 addOptional(p, 'sAlphas', 5);
 addOptional(p, 'rAlphas', 50);
 addOptional(p, 'hAlphas', 50);
-addOptional(p, 'hReps', 100);
+addOptional(p, 'hReps', 1e10);
 addOptional(p, 'pReps', 100);
 addOptional(p, 'pLambdas', 1e-7);
 addOptional(p, 'pTols', 1e-3);
