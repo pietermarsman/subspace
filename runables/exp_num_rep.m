@@ -1,15 +1,14 @@
 clean;
-warning('off', 'MATLAB:mir_warning_maybe_uninitialized_temporary')
 
 %% PARAMS
-repeats = 2
+repeats = 20
 dataset = 2
 verbose = true
 subsets = 2
-params = {'sAlphas', [10:10:100]};
+params = {'rAlphas', [10:10:100], 'pReps', [10*subsets:10:2*64]};
 
 %% SETUP
-[savefile] = setup_save(['clustering_param', num2str(round(rand() * 100000))]);
+[savefile] = setup_save(['num_representatives', num2str(round(rand() * 100000))]);
 
 %% GET PARAMS
 [ sAlphas, rAlphas, hAlphas, hReps, pReps, pLambdas, pTols ] = ...

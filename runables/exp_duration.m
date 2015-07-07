@@ -1,28 +1,28 @@
 clean;
-warning('off', 'MATLAB:mir_warning_maybe_uninitialized_temporary')
 
 %% PARAMS
-repeats = 2
+repeats = 20
 dataset = 2
 verbose = true
-subsets = 2
-params = {'sAlphas', [10:10:100]};
+subsets = [2:1:10]
+params = {};
 
 %% SETUP
-[savefile] = setup_save(['clustering_param', num2str(round(rand() * 100000))]);
+[savefile] = setup_save(['duration', num2str(round(rand() * 100000))]);
 
 %% GET PARAMS
 [ sAlphas, rAlphas, hAlphas, hReps, pReps, pLambdas, pTols ] = ...
     algo_param(params{:});
-[ ~, ~, N, d, n, D, noise, cos ] = get_data(dataset, subsets);
+[ ~, ~, N, d, n, D, noise, cos ] = get_data(dataset, subsets(1));
 
 %% EXPERIMENT
-fprintf('==%s==\n %d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
+fprintf('==%s==\n %d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%f\n', ...
     savefile, repeats, N, n, d, D, noise)
 
-for i = [1:repeats]
+subsets = repmat(subsets, 1, repeats);
+for i = [1:length(subsets)]
     fprintf('Experiment %d: ', i)
-    [ x, labels, N, d, n, D, noise, cos ] = get_data(dataset, subsets);
+    [ x, labels, N, d, n, D, noise, cos ] = get_data(dataset, subsets(i));
     [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), cs{i}, rep{i}, names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, hReps, pReps, pLambdas, pTols);
     fprintf('\n')
 end
