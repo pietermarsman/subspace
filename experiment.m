@@ -97,6 +97,7 @@ for a = rAlphas
 end
 
 % SSSC
+pReps(pReps > size(x, 2)) = [];
 for reps = pReps
     for tol = pTol
         for lambda = pLambda
@@ -116,6 +117,7 @@ for reps = pReps
 end
 
 % HSSC
+hMaxReps(hMaxReps > size(x, 2)) = [];
 for a = hAlphas
     for maxRep = hMaxReps
         fprintf('HSSC(a=%d,reps=%d):', a, maxRep); 

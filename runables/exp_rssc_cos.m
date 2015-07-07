@@ -4,7 +4,7 @@ clean;
 repeats = 10
 dataset = 1
 verbose = true
-subsets = 2
+subsets = 3
 params = {'hAlphas', [], 'pReps', []}
 cosses = [0.0:0.1:1.0]
 
