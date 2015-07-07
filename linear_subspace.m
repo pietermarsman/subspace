@@ -25,7 +25,7 @@ for i = [1:S]
         avg_rot = normc(sum(all_rot, 2));
         nullspace = null(all_rot');
         idx = randperm(size(nullspace, 2), d);
-        null_coordinate = sin(acos(cos_theta)) * log(d+1)/log(2) * nullspace(:, idx);
+        null_coordinate = sin(acos(cos_theta)) * log(d+1)/log(exp(1)) * nullspace(:, idx);
         avg_coordinate = cos_theta * repmat(avg_rot, 1, d);
         rot(:, :, i) = normc(null_coordinate + avg_coordinate);
     end
@@ -49,7 +49,7 @@ x = reshape(x, size(x, 1), size(x, 2) * size(x, 3));
 
 % Add noise
 if noise > 0
-    mean = zeros(D, 1);
+    mu = zeros(D, 1);
     sigma = eye(D)*noise;
-    x = x + mvnrnd(mean, sigma, size(x, 2))';
+    x = x + mvnrnd(mu, sigma, size(x, 2))';
 end
