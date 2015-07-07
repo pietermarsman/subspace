@@ -1,10 +1,10 @@
 clean;
 
 %% PARAMS
-repeats = 20
+repeats = 10
 dataset = 2
 verbose = true
-subsets = [2:1:10]
+subsets = [2:2:10]
 params = {};
 
 %% SETUP
@@ -20,7 +20,7 @@ fprintf('==%s==\n %d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%f\n', ..
     savefile, repeats, N, n, d, D, noise)
 
 subsets = repmat(subsets, 1, repeats);
-for i = [1:length(subsets)]
+parfor i = [1:length(subsets)]
     fprintf('Experiment %d: ', i)
     [ x, labels, N, d, n, D, noise, cos ] = get_data(dataset, subsets(i));
     [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), cs{i}, rep{i}, names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, hReps, pReps, pLambdas, pTols);
