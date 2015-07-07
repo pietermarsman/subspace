@@ -8,7 +8,7 @@ exp_name = 'exp_rep_vs_err'
 diary(['data/', exp_name, '.txt']);
 verbose = false;
 
-repeats = 2;
+repeats = 20;
 dataset = 2;
 
 % Dataset
@@ -58,13 +58,6 @@ for i = [1:repeats]
         x = normc(x); % normalize datapoints
         
         [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), cs{i}, rep{i}, names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, [N], reps, pLambda, pTol);
-        if verbose
-            fprintf('\nname\t error\t mut\t dur\t reps\n');
-            for j = 1:length(names{1})
-                fprintf('%s \t%f \t%f \t%f \t%f\n', names{1}{j}, err(j, i), ...
-                    mut(j, i), dur(j, i), length(rep{i}{j}));
-            end
-        end
     catch E
         warning(getReport(E))
     end
