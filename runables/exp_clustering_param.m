@@ -55,7 +55,6 @@ parfor i = [1:repeats]
             labels = yaleLabels;
         end
         x = normc(x); % normalize datapoints
-        imshow(x, [min(min(x)), max(max(x))])';
         
         [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, reps, reps, pLambda, pTol);
     catch E
