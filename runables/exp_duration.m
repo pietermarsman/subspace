@@ -5,7 +5,7 @@ repeats = 20
 dataset = 2
 verbose = true
 subsets = [2:10]
-params = {'hReps', 1e10};
+params = {'hReps', 1e10, 'hAlphas', [10, 25, 50]};
 
 %% SETUP
 [savefile] = setup_save(['duration', num2str(round(rand() * 100000))]);
