@@ -1,6 +1,6 @@
 clear all;
 
-name = 'rssc_noise_vs_err81472.mat';
+name = 'rssc_noise_vs_err67167.mat';
 load(['data/', name]);
 dir = 'fig/rep_vs_err';
 
@@ -12,7 +12,11 @@ for noise = unique_noises
     st = [st, std(err(:, noises == noise), 1, 2)];
 end
 
-errorbar(repmat(unique_noises, length(names), 1)', avg', st')
+xs = repmat(unique_noises, length(names), 1)';
+xs(:, 1) = xs(:, 1) * 0.99;
+xs(:, 2) = xs(:, 2) * 1.01;
+
+errorbar(xs, avg', st')
 set(gca, 'XTick', unique_noises)
 legend(names)
 beautyplot('Noise', 'Error', '', false)

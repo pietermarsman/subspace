@@ -6,7 +6,7 @@ dataset = 1
 verbose = true
 subsets = 3
 params = {'hAlphas', [], 'pReps', []}
-noises = [0.0:0.001:0.01]
+noises = [0.0:0.005:0.1]
 
 %% SETUP
 [savefile] = setup_save(['rssc_noise_vs_err', num2str(round(rand() * 100000))]);

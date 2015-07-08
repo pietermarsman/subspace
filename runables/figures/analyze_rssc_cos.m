@@ -2,7 +2,8 @@ clear all;
 
 name = 'rssc_cosses32099.mat';
 load(['data/', name]);
-dir = 'fig/rep_vs_err';
+dir = 'fig';
+savename = [dir, 'cos_err']
 
 unique_cosses = sort(unique(cosses));
 avg = [];
@@ -16,3 +17,5 @@ errorbar(repmat(unique_cosses, length(names), 1)', avg', st')
 set(gca, 'XTick', unique_cosses)
 legend(names)
 beautyplot('Cosine distance', 'Error', '', false)
+savefig(savename)
+export_fig(savename, '-pdf', '-transparent')
