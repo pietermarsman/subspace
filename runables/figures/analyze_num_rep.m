@@ -1,9 +1,11 @@
 function analyze_rep_vs_err()
-clear all;
+clean
 
-name = 'num_representatives81472.mat';
+name = 'num_representatives68342.mat';
 load(['data/', name]);
-dir = 'fig/rep_vs_err';
+dir = 'fig';
+savename = [dir, '/num_rep'];
+mkdir(dir)
 
 position = [0.1 0.3 .85 .75];
 angle = 45;
@@ -29,7 +31,8 @@ for j = 1:size(rep, 2)
 end
 [sssc_values, sssc_means, sssc_std] = average_values(sssc_temp);
 [rssc_values, rssc_means, rssc_std] = average_values(rssc_temp);
-    
+[hssc_values, hssc_means, hssc_std] = average_values(hssc_temp);
+
 hold on;
 plot([0, N], [ssc, ssc]);
 errorbar(sssc_values, sssc_means, sssc_std);
@@ -37,6 +40,8 @@ errorbar(rssc_values, rssc_means, rssc_std);
 legend('SSC', 'SSSC', 'RSSC');
 
 beautyplot('#Representatives', 'Error rate', '', false)
+savefig(savename)
+export_fig(savename, '-pdf', '-transparent')
 
 
 end 

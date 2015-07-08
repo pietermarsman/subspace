@@ -6,7 +6,7 @@ dataset = 2
 verbose = true
 subsets = 10
 params = {'rAlphas', [10:10:100], ...
-    'pReps', [10*subsets:10:2*64]};
+    'pReps', [100:100:500]};
 
 %% SETUP
 [savefile] = setup_save(['num_representatives', num2str(round(rand() * 100000))]);
