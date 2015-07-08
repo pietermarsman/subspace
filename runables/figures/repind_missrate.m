@@ -27,8 +27,7 @@ fprintf('==%s==\n %d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ..
 for i = [1:repeats]
     fprintf('Experiment %d: ', i)
     [ x, labels, N, d, n, D, noise, cos ] = get_data(dataset, subsets, dataparams{:});
-    [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), cs{i}, rep{i},
-    names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, hReps, pReps, pLambdas, pTols);
+    [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), cs{i}, rep{i}, names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, hReps, pReps, pLambdas, pTols);
 end
 
 %% POST PROCESS
