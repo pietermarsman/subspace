@@ -1,6 +1,6 @@
 clear all;
 
-name = 'rssc_cosses81472.mat';
+name = 'rssc_cosses32099.mat';
 load(['data/', name]);
 dir = 'fig/rep_vs_err';
 
