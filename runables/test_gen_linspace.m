@@ -1,7 +1,7 @@
 clear
 iter=1;
 thetas = [0.0:0.01:1.0];
-d = 1;
+d = 10;
 for theta = thetas
     [u, rot, x, labels] = linear_subspace(1000, d, 2, 200, theta, 0.0);
     angles_norm = 1 - pdist2(x(:, labels==1)', x(:, labels==2)', 'cosine');

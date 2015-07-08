@@ -1,12 +1,12 @@
 clean;
 
 %% PARAMS
-repeats = 10
+repeats = 50
 dataset = 1
 verbose = true
 subsets = 3
-params = {'hAlphas', [], 'pReps', []}
-noises = [0.0:0.005:0.1]
+params = {'hAlphas', []}
+noises = [0.0:0.01:0.1]
 
 %% SETUP
 [savefile] = setup_save(['rssc_noise_vs_err', num2str(round(rand() * 100000))]);

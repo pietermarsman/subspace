@@ -1,7 +1,7 @@
 function analyze_rep_vs_err()
 clean
 
-name = 'num_representatives68342.mat';
+name = 'num_representatives77657.mat';
 load(['data/', name]);
 dir = 'fig';
 savename = [dir, '/num_rep'];
@@ -38,8 +38,10 @@ plot([0, N], [ssc, ssc]);
 errorbar(sssc_values, sssc_means, sssc_std);
 errorbar(rssc_values, rssc_means, rssc_std);
 legend('SSC', 'SSSC', 'RSSC');
+title(sprintf('N=%d, D=%d', N, D))
 
 beautyplot('#Representatives', 'Error rate', '', false)
+ylim([0, 1])
 savefig(savename)
 export_fig(savename, '-pdf', '-transparent')
 
