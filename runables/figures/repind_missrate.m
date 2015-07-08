@@ -10,7 +10,7 @@ params = {'sAlphas', [], ...
     'hAlphas', 25, ...
     'hReps', 500, ...
     'pReps', []};
-dataparams = {'N', 500};
+dataparams = {'N', 500, 'noise', 0.001};
 
 %% SETUP
 [savefile] = setup_save(['repind_missrate', num2str(round(rand() * 100000))]);
@@ -24,25 +24,11 @@ dataparams = {'N', 500};
 fprintf('==%s==\n %d Experiments with N=%d, n=%d, d=%d, D=%d and noise=%s\n', ...
     savefile, repeats, N, n, d, D, noise)
 
-idx_missing = [];
 for i = [1:repeats]
     fprintf('Experiment %d: ', i)
     [ x, labels, N, d, n, D, noise, cos ] = get_data(dataset, subsets, dataparams{:});
-    [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), cs{i}, rep{i}, names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, hReps, pReps, pLambdas, pTols);
-    
-    rssc_repInd = rep{1}{1};
-    nReps = length(rssc_repInd)
-    k = 1;
-    for id = rssc_repInd
-        missing = [k / size(rssc_repInd, 2)];
-        for j = 1:length(names{1})
-            maxReps = min(nReps, length(rep{i}{j}));
-            missing = [missing, sum(rep{i}{j}(1:maxReps) == id) == 0];
-        end
-        idx_missing = [idx_missing; missing];
-        k = k + 1;
-    end
-    fprintf('\n')
+    [err(:, i), mut(:, i), dur(:, i), pred(:, :, i), cs{i}, rep{i},
+    names{i}] = experiment(x, labels, n, sAlphas, rAlphas, hAlphas, hReps, pReps, pLambdas, pTols);
 end
 
 %% POST PROCESS
@@ -50,6 +36,24 @@ post_process();
 
 %% SAVING
 save(savefile)
+
+%% PROCESSING
+idx_missing = [];
+for i = [1:repeats]
+    rssc_repInd = rep{i}{1};
+    nReps = length(rssc_repInd);
+    k = 1;
+    for id = rssc_repInd
+        missing = [k / size(rssc_repInd, 2)];
+        for j = 1:length(names)
+            maxReps = min(nReps, length(rep{i}{j}));
+            missing = [missing, sum(rep{i}{j}(1:maxReps) == id) == 0];
+        end
+        idx_missing = [idx_missing; missing];
+        k = k + 1;
+    end
+end
+fprintf('\n')
 
 %% PLOTTING
 figure(2)
