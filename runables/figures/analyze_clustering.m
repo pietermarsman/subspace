@@ -1,5 +1,7 @@
-close all
+clean
 dir = 'fig'
+name = 'data/clustering_param38752.mat';
+load(name)
 
 position = [0.1 0.4 .85 .55];
 angle = 45;

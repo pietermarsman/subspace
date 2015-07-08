@@ -1,7 +1,7 @@
 clean;
 
 %% PARAMS
-repeats = 1
+repeats = 20
 dataset = 2
 verbose = true
 subsets = [2:10]
