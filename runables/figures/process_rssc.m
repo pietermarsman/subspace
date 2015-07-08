@@ -1,16 +1,12 @@
-clear all;
-close all;
+clean
 
 dir = 'fig/rssc';
 mkdir(dir);
 
-N = 30;
-d = 3;
-S = 3;
-D = 100;
-cos = 0.0;
-noise = 0.0;
-[~, ~, x, labels] = linear_subspace(N, d, S, D, cos, noise);
+range = [-.2, .4]
+dataset = 2;
+subsets = 3;
+[ x, labels, N, d, n, D, noise, cos ] = get_data(dataset, subsets);
 
 alpha = 6;
 r = 0;
@@ -19,8 +15,16 @@ verbose = false;
 length(repInd)
 
 clf;
-imshow(C, [min(min(C)), max(max(C))]);
+imshow(C, range);
 colormap jet
 name = [dir, '/CMat'];
+savefig(name)
+export_fig(name, '-dpng', '-transparent', '-m10')
+
+clf;
+imshow(zeros(size(C, 2), 1), range);
+colorbar()
+colormap jet;
+name = [dir, '/colorbar'];
 savefig(name)
 export_fig(name, '-dpng', '-transparent', '-m10')

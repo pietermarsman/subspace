@@ -6,7 +6,8 @@ verbose = true;
 useAll = false;
 useRep = false;
 useMix = true;
-numUses = useAll + useRep + useMix; 
+useSSSC = false;
+numUses = useAll + useRep + useMix + useSSSC; 
 
 nExp = length(sAlphas) + length(rAlphas) * numUses + length(hAlphas) * length(hMaxReps) * numUses + length(pReps) * length(pLambda) * length(pTol);
 N = length(labels);
@@ -94,6 +95,23 @@ for a = rAlphas
         names{iter} = ['RSSC mix ', int2str(a)];
         iter = iter + 1;
     end
+    
+    % Missrate rssc with ssc of representatives
+    if useSSSC
+        fprintf('sssc; '); 
+        tic;
+        par.nClass = n;
+        par = L1ParameterConfig(par);
+        par.lambda = 1e-7;
+        par.tolerance = 1e-3;
+        rSGrps = InSample(rInX, par.lambda, par.tolerance, par, par.nClass)';
+        pred(iter, :) = InOutSample(rInX, rOutX, rRep, rNotRep, rSGrps, verbose);
+        dur(iter) = toc + rssc_duration;
+        err(iter) = Misclassification(pred(iter, :)', labels);
+        mut(iter) = MutualInfo(pred(iter, :), labels);
+        names{iter} = ['RSSC sssc ', int2str(a)];
+        iter = iter + 1;
+    end
 end
 
 % SSSC
@@ -171,6 +189,23 @@ for a = hAlphas
             err(iter) = Misclassification(pred(iter, :)', labels);
             mut(iter) = MutualInfo(pred(iter, :), labels);
             names{iter} = ['HSSC mix ', int2str(a), ' ', int2str(maxRep)];
+            iter = iter + 1;
+        end
+
+        % Missrate hssc with ssc of representatives
+        if useSSSC
+            fprintf('sssc; '); 
+            tic;
+            par.nClass = n;
+            par = L1ParameterConfig(par);
+            par.lambda = 1e-7;
+            par.tolerance = 1e-3;
+            hSGrps = InSample(hInX, par.lambda, par.tolerance, par, par.nClass)';
+            pred(iter, :) = InOutSample(hInX, hOutX, hRep, hNotRep, hSGrps, verbose);
+            dur(iter) = toc + hssc_duration;
+            err(iter) = Misclassification(pred(iter, :)', labels);
+            mut(iter) = MutualInfo(pred(iter, :), labels);
+            names{iter} = ['HSSC sssc ', int2str(a), ' ', int2str(maxRep)];
             iter = iter + 1;
         end
     end
