@@ -1,6 +1,6 @@
 clear all;
 
-name = 'rssc_noise_vs_err66341.mat';
+name = 'rssc_noise_vs_err60662.mat';
 load(['data/', name]);
 dir = 'fig';
 mkdir(dir);
@@ -15,11 +15,14 @@ for noise = unique_noises
 end
 
 xs = repmat(unique_noises, length(names), 1)';
-xs(:, 1) = xs(:, 1) * 0.99;
-xs(:, 2) = xs(:, 2) * 1.01;
+range = max(max(xs)) - min(min(xs));
+for i = 1:length(names)
+    shift = i - (length(names) / 2);
+    xs(:, i) = xs(:, i) + shift * 0.01 * range;
+end
 
 errorbar(xs, avg', st')
-title(sprintf('N=%d, D=%d', N, D));
+title(sprintf('N=%d, D=%d, repeats=%d', N, D, repeats));
 legend(names)
 beautyplot('Noise', 'Error', '', false)
 savefig(savename)

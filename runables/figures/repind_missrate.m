@@ -2,15 +2,15 @@ clean;
 
 %% PARAMS
 repeats = 20
-dataset = 1
+dataset = 2
 verbose = true
-subsets = 3
+subsets = 10
 params = {'sAlphas', [], ...
     'rAlphas', 25, ...
     'hAlphas', 25, ...
-    'hReps', 500, ...
+    'hReps', 64*10, ...
     'pReps', []};
-dataparams = {'N', 500, 'noise', 0.001};
+dataparams = {};
 
 %% SETUP
 [savefile] = setup_save(['repind_missrate', num2str(round(rand() * 100000))]);
