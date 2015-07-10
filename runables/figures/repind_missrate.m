@@ -37,6 +37,8 @@ post_process();
 save(savefile)
 
 %% PROCESSING
+clean
+load('data/repind_missrate18409')
 idx_missing = [];
 for i = [1:repeats]
     rssc_repInd = rep{i}{1};
@@ -71,7 +73,7 @@ plot(repmat(range, length(names), 1)', bars)
 % plot(repmat(range, length(names), 1)', bars+std_bars, 'Color', colors(length(names, :)))
 ylim([0, 1]);
 suptitle('Part of the representatives not found by HSSC');
-title(sprintf('N=%d, d=%d, S=%d, D=%d, repeats=%d, noise=%.3f, cos=%.3f', N, d, subsets, D, repeats, noise, cos));
+title(sprintf('N=%d, d=%d, S=%d, D=%d, repeats=%d', N, d, subsets, D, repeats));
 legend(names)
 beautyplot('RSSC repInd place', 'Part not found', '', false);
 

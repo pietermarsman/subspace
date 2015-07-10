@@ -20,26 +20,24 @@ for i = [1:S]
     if sum(size(rot)) < 1
         [q, ~] = qr(rand(D, D));
         rot(:, :, i) = q(:, 1:d);
+%         rot(:, :, i) = eye(D, d);
     else
-        all_rot = reshape(rot, size(rot, 1), []);
-        avg_rot = normc(all_rot * rand(size(all_rot, 2), 1));
-        nullspace = null(all_rot');
-        null_vec = nullspace * normc(rand(size(nullspace, 2), d));
-        null_coordinate = sin(acos(cos_theta)) * null_vec;
-        avg_coordinate = cos_theta * repmat(avg_rot, 1, d);
-        rot(:, :, i) = null_coordinate + avg_coordinate;
+        a = reshape(rot, size(rot, 1), []);
+        avg = mean(rot, 3);
+        n = null(a');
+        
+        l_f2 = 2 - 2 * cos_theta;
+        l_i = norm(rot(:, :, 1) - avg);
+        l_k2 = l_f2 - l_i^ 2;
+        l_z = norm(avg);
+        cos_gamma = (1 + l_z^2 - l_k2) / (2 * l_z);
+        j = sin(acos(cos_gamma));
+        
+        idx = randperm(size(n, 2), d);
+        rot(:, :, i) = n(:, idx) * j + normc(avg) * cos_gamma;
     end
 end
 
-% Check angle
-%{
-for i = [1:S]
-  for j = [i+1:S]
-    [i, j]
-    rot(:, :, i)' * rot(:, :, j)
-  end
-end
-%}
 
 % Generate data
 for i = [1:S]

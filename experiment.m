@@ -3,11 +3,12 @@ function [ err, mut, dur, pred, cs, rep, names ] = experiment( x, labels, n, sAl
 %   Detailed explanation goes here
 
 verbose = true;
-useAll = false;
-useRep = false;
+useAll = true;
+useRep = true;
 useMix = true;
-useSSSC = false;
-numUses = useAll + useRep + useMix + useSSSC; 
+useSSSC = true;
+useSSSC2 = true;
+numUses = useAll + useRep + useMix + useSSSC + useSSSC2; 
 
 nExp = length(sAlphas) + length(rAlphas) * numUses + length(hAlphas) * length(hMaxReps) * numUses + length(pReps) * length(pLambda) * length(pTol);
 N = length(labels);
@@ -50,7 +51,7 @@ for a = rAlphas
     rNotRep = setdiff(1:size(x,2), rRep);
     rInX = x(:, rRep);
     rOutX = x(:, rNotRep);
-%     rC = rC - diag(diag(rC));
+    rC = rC - diag(diag(rC));
     rssc_duration = toc;
     cs{iter} = rC;
     rep{iter} = rRep;
@@ -86,8 +87,7 @@ for a = rAlphas
     if useMix
         fprintf('mix; '); 
         tic;
-        [cstar, rSGrps] = SSC(rInX, sR, sAffine, sAlpha, sOutlier, sRho, min(n, length(rRep)));
-        cs{iter} = cstar;
+        [RCssc, rSGrps] = SSC(rInX, sR, sAffine, sAlpha, sOutlier, sRho, min(n, length(rRep)));
         pred(iter, :) = InOutSample(rInX, rOutX, rRep, rNotRep, rSGrps, verbose);
         dur(iter) = toc + rssc_duration;
         err(iter) = Misclassification(pred(iter, :)', labels);
@@ -110,6 +110,23 @@ for a = rAlphas
         err(iter) = Misclassification(pred(iter, :)', labels);
         mut(iter) = MutualInfo(pred(iter, :), labels);
         names{iter} = ['RSSC sssc ', int2str(a)];
+        iter = iter + 1;
+    end
+    
+    % Missrate rssc with ssc of representatives
+    if useSSSC2
+        fprintf('sssc2; '); 
+        tic;
+        par.nClass = n;
+        par = L1ParameterConfig(par);
+        par.lambda = 1e-7;
+        par.tolerance = 1e-3;
+        rSGrps = InSample(rOutX, par.lambda, par.tolerance, par, par.nClass)';
+        pred(iter, :) = InOutSample(rOutX, rInX, rNotRep, rRep, rSGrps, verbose);
+        dur(iter) = toc + rssc_duration;
+        err(iter) = Misclassification(pred(iter, :)', labels);
+        mut(iter) = MutualInfo(pred(iter, :), labels);
+        names{iter} = ['RSSC sssc2 ', int2str(a)];
         iter = iter + 1;
     end
 end
