@@ -2,8 +2,9 @@ clear
 iter=1;
 thetas = [0.0:0.01:1.0];
 d = 10;
+N = 1000;
 for theta = thetas
-    [u, rot, x, labels] = linear_subspace(1000, d, 10, 200, theta, 0.0);
+    [u, rot, x, labels] = linear_subspace(N, d, 10, 200, theta, 0.0);
     angles_norm = 1 - pdist2(x(:, labels==10)', x(:, labels==9)', 'cosine');
     mini(iter) = min(abs(reshape(angles_norm, 1, [])));
     maxi(iter) = max(abs(reshape(angles_norm, 1, [])));

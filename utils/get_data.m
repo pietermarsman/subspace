@@ -27,13 +27,13 @@ elseif dataset == 2
     D = size(Y, 1);
     noise = -1;
     cos = -1;
-    yaleX = Y(:, :, 1:n);
+    idx = randperm(10, n);
+    yaleX = Y(:, :, idx);
     x = reshape(yaleX, size(yaleX, 1), []);
+    x = normc(x);
     labels = s{n};
 else
     error('Dataset should be between 1 and 2')
 end
-
-x = normc(x);
 
 end

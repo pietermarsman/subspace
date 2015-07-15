@@ -1,4 +1,4 @@
-function [ repInd, C ] = rssc( Y, alpha, r, verbose)
+function [ repInd, C ] = rssc( Y, alpha, r, nonnegative, verbose)
 %RSSC Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -30,10 +30,13 @@ end
 
 C = almLasso_mat_func(Y,affine,regParam,q,thr,maxIter,verbose);
 
+if nonnegative
+    C(C < 0) = 0;
+end
+
 % Always return all indices
 sInd = findRep(C,thrS,q);
 % repInd = rmRep(sInd,Y,thrP);
 repInd = sInd;
-
 end
 
