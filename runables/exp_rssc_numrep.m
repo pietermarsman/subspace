@@ -13,7 +13,7 @@ params = {'sAlphas', [], ...
 dataparams = {};
 
 %% SETUP
-[savefile] = setup_save(['clustering_param', num2str(round(rand() * 100000))]);
+[savefile] = setup_save(['rssc_numrep', num2str(round(rand() * 100000))]);
 
 %% GET PARAMS
 [ sAlphas, rAlphas, hAlphas, hReps, pReps, pLambdas, pTols ] = ...

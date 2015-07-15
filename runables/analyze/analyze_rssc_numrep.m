@@ -1,3 +1,10 @@
+clean;
+
+name = 'rssc_numrep39320.mat';
+load(['data/', name]);
+
+dir = 'fig';
+savename = [dir, '/numrep'];
 
 num_rep = [];
 error = [];
@@ -18,3 +25,8 @@ hold on;
 scatter(num_rep(id_rep), error(id_rep));
 scatter(num_rep(id_no), error(id_no));
 legend('Representatives', 'Not representatives')
+beautyplot('In-sample size', 'Error', '', false)
+
+%% SAVE
+savefig(savename)
+export_fig(savename, '-pdf', '-transparent')
