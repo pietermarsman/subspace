@@ -6,7 +6,7 @@ function [ e, m, d, p, cs, rep, names ] = experiment( x, labels, n, varargin )
 p = inputParser;
 addOptional(p, 'sAlphas', []);
 addOptional(p, 'r', 0);
-addOptional(p, 'sAffine', false);
+addOptional(p, 'affine', false);
 addOptional(p, 'sOutlier', false);
 addOptional(p, 'sRho', 1.0);
 addOptional(p, 'sK', 0);
@@ -26,7 +26,7 @@ parse(p,varargin{:});
 %% Algorithm parameters
 sAlphas = p.Results.sAlphas;
 r = p.Results.r;                        % projection dimension
-sAffine = p.Results.sAffine;
+affine = p.Results.affine;
 sOutlier = p.Results.sOutlier;          % if there are outliers
 sRho = p.Results.sRho;                  % coefficient threshold
 sK = p.Results.sK;                      % number of strongest coefficients to keep
@@ -68,7 +68,7 @@ par.tolerance = 1e-3;
 %% SSC
 for a = sAlphas
     name = before(sprintf('SSC(a=%d)', a));
-    [C, ssc_pred] = SSC(x, r, sAffine, a, sOutlier, sRho, n);
+    [C, ssc_pred] = SSC(x, r, affine, a, sOutlier, sRho, n);
     [d(i), e(i), m(i), names{i}, cs{i}, rep{i}] = ...
         after(name, ssc_pred, labels, C, 1:N, 0);
     i = i + 1;
@@ -77,7 +77,7 @@ end
 %% RSSC
 for a = rAlphas
     before('RSSC');
-    [rRep, rC] = rssc(x, a, r, nonNegative, false);
+    [rRep, rC] = rssc(x, a, r, affine, nonNegative, false);
     [rNotRep, rInX, rOutX] = divide_dataset(x, rRep);
     [rDur, ~, ~, ~, cs{i}, ~] = after([], [], [], rC, [], 0);
     
@@ -129,7 +129,7 @@ end
 hReps = check_reps(hReps, N);
 for a = hAlphas
     name = before(sprintf('HSSC(a=%d)', a)); 
-    [hRep, hC] = hssc(x, a, nonNegative, verbose);
+    [hRep, hC] = hssc(x, a, affine, nonNegative, verbose);
     [hNotRep, hInX, hOutX] = divide_dataset(x, hRep);
     [hDur, ~, ~, ~, cs{i}, ~] = ...
         after(name, [], [], hC, [], 0);

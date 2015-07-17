@@ -1,4 +1,4 @@
-function [ repInd, C ] = hssc( Y, alpha, nonNegative, verbose )
+function [ repInd, C ] = hssc( Y, alpha, affine, nonNegative, verbose )
 %HSSC Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -16,7 +16,8 @@ for i = [1:subsets]
     subset_start = round(s*(i-1)) + 1;
     subset_end = round(s*i);
     subset_idx = idx(subset_start:subset_end);
-    [subset_rep, subset_C] = rssc(Y(:, subset_idx), alpha, 0, nonNegative, false);
+    [subset_rep, subset_C] = rssc(Y(:, subset_idx), alpha, 0, affine, ...
+        nonNegative, false);
     hssc_repInd = [hssc_repInd, subset_idx(subset_rep)];
     hssc_C(subset_idx, subset_idx) = subset_C;
 end

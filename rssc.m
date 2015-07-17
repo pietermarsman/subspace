@@ -1,4 +1,4 @@
-function [ repInd, C ] = rssc( Y, alpha, r, nonnegative, verbose)
+function [ repInd, C ] = rssc( Y, alpha, r, affine, nonnegative, verbose)
 %RSSC Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -14,7 +14,6 @@ end
 
 q = 2;
 regParam = [alpha alpha];
-affine = false;
 thr =  1e-7;
 maxIter = 5000;
 thrS = 0.9999;
