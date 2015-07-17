@@ -33,7 +33,7 @@ elseif dataset_id == 2
     x = reshape(yaleX, size(yaleX, 1), []);
     labels = s{n};
 elseif ischar(dataset_id)
-    data = load('datasets/hopkins155+16.mat', 'hopkins');
+    data = load('datasets/Hopkins155.mat', 'hopkins');
     hopkins = data.hopkins;
     names = cellfun(@(x) x.name, hopkins, 'UniformOutput', false);
     dataset_bidx = cellfun(@(x) strcmp(x, dataset_id), names);

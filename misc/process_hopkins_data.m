@@ -1,6 +1,7 @@
 clean;
 
-folder = '/home/pieter/Datasets/Hopkins/';
+name = 'Hopkins16'
+folder = ['/home/pieter/Datasets/', name, '/'];
 folder_length = length(folder);
 addpath(genpath(folder));
 
@@ -13,6 +14,7 @@ if status == 0
     hopkins = cell(length(files), 1);
     dataset_i = 1;
     for file = files
+        fprintf('Processing %s\n', file{1})
         hopkins{dataset_i, 1} = load(file{1});
         path = strsplit(file{1}(folder_length+1:end), '/');
         hopkins{dataset_i, 1}.name = path{1};
@@ -23,4 +25,5 @@ else
     warning(num2str(status))
 end
 
-save('/home/pieter/Documents/Ai/Thesis/code/datasets/hopkins155+16', 'hopkins');
+fprintf('Saving\n')
+save(['/home/pieter/Documents/Ai/Thesis/code/datasets/', name], 'hopkins');
