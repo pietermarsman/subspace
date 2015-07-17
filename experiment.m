@@ -94,7 +94,7 @@ for a = rAlphas
     % RSSC with SSSC of representatives
     if useRep
         name = before(sprintf('RSSC_rep(a=%d)', a));
-        if lenght(rRep) > n
+        if length(rRep) > n
             rSGrps = InSample(rInX, par.lambda, par.tolerance, par, par.nClass)';
             rssc2_pred = InOutSample(rInX, rOutX, rRep, rNotRep, rSGrps, verbose);
             [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
