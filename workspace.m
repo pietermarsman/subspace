@@ -1,7 +1,3 @@
-clear all;
-close all;
-clc;
-
 !synclient HorizTwoFingerScroll=0
  
 addpath(genpath('runables'))
@@ -23,3 +19,5 @@ addpath('libraries/SSC_ADMM_v1.1')
 addpath(genpath('libraries/SSSC_code&Data_CVPR2013'))
 
 rng shuffle;
+
+clean

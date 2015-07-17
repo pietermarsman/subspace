@@ -1,4 +1,4 @@
-function [ repInd, C ] = hssc( Y, alpha, max_rep, nonNegative, verbose )
+function [ repInd, C ] = hssc( Y, alpha, nonNegative, verbose )
 %HSSC Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -26,15 +26,14 @@ if size(hssc_repInd, 2) >= size(Y, 2)
         alpha = alpha * .5;
         warning(sprintf('Could not reduce number of representatives. Dividing alpha by 2.\nSize Y: %g. Alpha: %d', size(Y, 2), alpha))
     end
-    
 end
-if size(hssc_repInd, 2) > max_rep
-    [repInd2, C2_] = hssc(Y(:, hssc_repInd), alpha, max_rep, nonNegative, verbose);
-    C(hssc_repInd, :) = C2_ * hssc_C(hssc_repInd, :);
-    repInd = hssc_repInd(repInd2);
-else
-    repInd = hssc_repInd;
-    C = hssc_C;
-end
+% if size(hssc_repInd, 2) > max_rep
+%     [repInd2, C2_] = hssc(Y(:, hssc_repInd), alpha, max_rep, nonNegative, verbose);
+%     C(hssc_repInd, :) = C2_ * hssc_C(hssc_repInd, :);
+%     repInd = hssc_repInd(repInd2);
+% else
+repInd = hssc_repInd;
+C = hssc_C;
+% end
 
 end

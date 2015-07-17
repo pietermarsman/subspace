@@ -18,6 +18,7 @@ Tr_dat = data(:, Tr_idx); % the landmark data;
 Tt_dat = data(:, Tt_idx); % the non-landmark data
 
 % clustering the in-sample data
+size(Tr_dat)
 Tr_plabel = InSample(Tr_dat, par.lambda, par.tolerance, par, n);
 Tt_plabel = OutSample(Tr_dat, Tt_dat, Tr_plabel);
 P_label = [];
