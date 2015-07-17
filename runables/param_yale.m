@@ -7,7 +7,7 @@ function savefile = param_yale(dataparams, repeats )
 %% PARAMS
 dataset = {2}
 verbose = true
-alphas = [10:10:100, 100:100:1000];
+alphas = [5:9, 10:5:45, 50:10:300];
 params = {...
     'rAlphas', alphas, ...
     };
