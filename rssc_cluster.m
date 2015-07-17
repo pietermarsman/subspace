@@ -30,9 +30,12 @@ InX = x(:, InIdx);
 OutX = x(:, OutIdx);
 
 % Do the insample/outsample
-InLabels = InSample(InX, par.lambda, par.tolerance, par, par.nClass)';
-OutLabels = OutSample(InX, OutX, InLabels);
-labels([InIdx, OutIdx]) = [InLabels', OutLabels];
+if length(InIdx) > n
+    InLabels = InSample(InX, par.lambda, par.tolerance, par, par.nClass)';
+    OutLabels = OutSample(InX, OutX, InLabels);
+    labels([InIdx, OutIdx]) = [InLabels', OutLabels];
+else
+    labels([InIdx, OutIdx]) = 1;
 
 end
 

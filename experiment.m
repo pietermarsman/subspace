@@ -94,10 +94,12 @@ for a = rAlphas
     % RSSC with SSSC of representatives
     if useRep
         name = before(sprintf('RSSC_rep(a=%d)', a));
-        rSGrps = InSample(rInX, par.lambda, par.tolerance, par, par.nClass)';
-        rssc2_pred = InOutSample(rInX, rOutX, rRep, rNotRep, rSGrps, verbose);
-        [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
-            after(name, rssc2_pred', labels, [], rRep, rDur);
+        if lenght(rRep) > n
+            rSGrps = InSample(rInX, par.lambda, par.tolerance, par, par.nClass)';
+            rssc2_pred = InOutSample(rInX, rOutX, rRep, rNotRep, rSGrps, verbose);
+            [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
+                after(name, rssc2_pred', labels, [], rRep, rDur);
+        end
         i = i + 1;
     end
     
@@ -147,10 +149,12 @@ for a = hAlphas
     % HSSC with SSSC of representatives
     if useRep
         name = before(sprintf('HSSC_rep(a=%d)', a));
-        hSGrps = InSample(hInX, par.lambda, par.tolerance, par, par.nClass)';
-        h2_pred = InOutSample(hInX, hOutX, hRep, hNotRep, hSGrps, verbose);
-        [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
-            after(name, h2_pred', labels, [], hRep, hDur);
+        if length(hRep) > n
+            hSGrps = InSample(hInX, par.lambda, par.tolerance, par, par.nClass)';
+            h2_pred = InOutSample(hInX, hOutX, hRep, hNotRep, hSGrps, verbose);
+            [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
+                after(name, h2_pred', labels, [], hRep, hDur);
+        end
         i = i + 1;
     end
 
