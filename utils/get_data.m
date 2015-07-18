@@ -4,7 +4,7 @@ function [ x, labels, N, d, n, D, noise, cos ] = get_data( varargin )
 
 p = inputParser;
 addRequired(p, 'dataset');
-addOptional(p, 'noise', 0.005);
+addOptional(p, 'noise', 0.01);
 addOptional(p, 'cos', 0.5);
 addOptional(p, 'N', 500);
 addOptional(p, 'D', 2000);

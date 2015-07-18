@@ -4,7 +4,7 @@ name = 'data/param_hopkins_7361626563.mat';
 load(name)
 
 %% Selection
-selection = 1:2:length(alphas)*2;
+selection = length(alphas)*2+1:length(names);
 selection(9) = [];
 
 names = names(selection);
@@ -17,16 +17,16 @@ rep = rep ./ repmat(Ns, size(rep, 1), 1);
 exp_N = length(names)
 
 %% Information
-tit = 'RSSC with representatives';
-xlab = 'Alpha';
-xvalues = alphas([1:8, 10:19]);
+tit = 'Hopkins155 - SSSC';
+xlab = ''; %'Alpha';
+xvalues = names; %alphas([1:8, 10:19]);
 ratio = [2, 1, 1];
 position = [0 0 800 800] ;
 
 savetitle = lower(strjoin(strsplit(tit, ' '), ''))
 
 %% Plot
-angle = 0;
+angle = 90;
 
 aFig = figure(1);
 hold on
@@ -39,7 +39,7 @@ set(gca, 'XTickLabel', xvalues)
 set(aFig, 'Position', position);
 set(gca, 'PlotBoxAspectRatio', ratio)
 ylim([0, 1])
-% rotateticklabel(gca, angle)
+rotateticklabel(gca, angle)
 name = [dir, '/', savetitle, '_error'];
 savefig(name)
 export_fig(name, '-pdf', '-transparent')
@@ -55,7 +55,7 @@ set(gca, 'XTickLabel', xvalues)
 set(bFig, 'Position', position);
 set(gca, 'PlotBoxAspectRatio', ratio)
 ylim([0, 1])
-% rotateticklabel(gca, angle)
+rotateticklabel(gca, angle)
 name = [dir, '/', savetitle, '_mutual_info'];
 savefig(name)
 export_fig(name, '-pdf', '-transparent')
@@ -71,7 +71,7 @@ set(gca, 'XTick', 1:length(xvalues))
 set(gca, 'XTickLabel', xvalues)
 set(cFig, 'Position', position);
 set(gca, 'PlotBoxAspectRatio', ratio)
-% rotateticklabel(gca, angle)
+rotateticklabel(gca, angle)
 name = [dir, '/', savetitle, '_duration'];
 savefig(name)
 export_fig(name, '-pdf', '-transparent')
@@ -112,6 +112,11 @@ fprintf('\n==Kruskal-Wallis test==\n')
 [rep_p, ~, rep_stats] = kruskalwallis(rep', xvalues, 'off');
 fprintf('Group medians differ for error (%.2d), mutual info (%.2d), duration (%.2d) and in-sample size (%.2d)\n', err_p, mut_p, dur_p, rep_p);
 
+fprintf('\n==Pair wise testing==\n')
+[~, err_best] = min(err_stats.meanranks);
+[~, mut_best] = max(mut_stats.meanranks);
+[~, dur_best] = min(dur_stats.meanranks);
+
 err_c = multcompare(err_stats, 'display', 'off');
 mut_c = multcompare(mut_stats, 'display', 'off');
 dur_c = multcompare(dur_stats, 'display', 'off');
@@ -124,3 +129,22 @@ err_cp = err_cp + err_cp';
 mut_cp = mut_cp + mut_cp';
 dur_cp = dur_cp + dur_cp';
 rep_cp = rep_cp + rep_cp';
+
+fprintf('Best error: \t\t%s\n', names{err_best});
+fprintf('Best mutual info: \t%s\n', names{mut_best});
+fprintf('Best duration: \t\t%s\n', names{dur_best});
+
+fprintf('\nSimilarity: \n     ')
+fprintf('%21s', names{:})
+fprintf('\nError: ')
+fprintf('%3f             ', err_cp(err_best, :))
+fprintf('\nMutIn: ')
+fprintf('%3f             ', mut_cp(mut_best, :))
+fprintf('\nDurat: ')
+fprintf('%3f             ', dur_cp(dur_best, :))
+fprintf('\n')
+
+
+
+
+

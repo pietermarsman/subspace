@@ -11,6 +11,7 @@ alphas = [5:9, 10:5:45, 50:10:300];
 params = {...
     'rAlphas', alphas, ...
     };
+algos = [false, true, false, false];
 
 %% SETUP
 [savefile] = setup_save('param_yale');
