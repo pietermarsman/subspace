@@ -9,11 +9,8 @@ dataset = {1, 2, 'cars1'}
 dataparams = {'N', 100}
 verbose = true
 repeats = 1
-params = {'sAlphas', [5], ...
-    'rAlphas', [50], ...
-    'hAlphas', [50], ...
-    'pReps', [.1] ...
-    };
+algos = [1, 1, 1, 1];
+params = {};
 
 %% SETUP
 [savefile] = setup_save('test_runable');

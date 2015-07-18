@@ -1,10 +1,10 @@
-function [ e, m, d, p, cs, rep, names ] = experiment( x, labels, n, varargin )
+function [ e, m, d, p, cs, rep, names ] = experiment( x, labels, n, algo, varargin )
 %EXPERIMENT Summary of this function goes here
 %   Detailed explanation goes here
 
 %% Parse input
 p = inputParser;
-addOptional(p, 'sAlphas', []);
+addOptional(p, 'sAlphas', 5);
 addOptional(p, 'r', 0);
 addOptional(p, 'affine', false);
 addOptional(p, 'sOutlier', false);
@@ -13,15 +13,20 @@ addOptional(p, 'sK', 0);
 addOptional(p, 'useAll', false);
 addOptional(p, 'useRep', true);
 addOptional(p, 'useNoRep', true);
-addOptional(p, 'rAlphas', []);
-addOptional(p, 'hAlphas', []);
-addOptional(p, 'hReps', [size(x, 2)]);
-addOptional(p, 'pReps', []);
+addOptional(p, 'rAlphas', 50);
+addOptional(p, 'rLambda', 1e-7);
+addOptional(p, 'rTol', 1e-3);
+addOptional(p, 'hAlphas', 50);
+addOptional(p, 'numreps', .1);
 addOptional(p, 'pLambdas', 1e-7);
 addOptional(p, 'pTols', 1e-3);
 addOptional(p, 'nonnegative', false);
 addOptional(p, 'verbose', false);
 parse(p,varargin{:});
+
+if length(algo) ~= 4
+    error('Length of algo should be 4')
+end
 
 %% Algorithm parameters
 sAlphas = p.Results.sAlphas;
@@ -34,20 +39,25 @@ useAll = p.Results.useAll;
 useRep = p.Results.useRep;
 useNoRep = p.Results.useNoRep;
 rAlphas = p.Results.rAlphas;
+rLambda = p.Results.rLambda;
+rTol = p.Results.rTol;
 hAlphas = p.Results.hAlphas;
-hReps = p.Results.hReps;
-pReps = p.Results.pReps;
+hLambda = rLambda;
+hTol = rTol;
+numreps = check_reps(round(p.Results.numreps * length(labels)), length(labels));
 pLambdas = p.Results.pLambdas;
 pTols = p.Results.pTols;
 nonNegative = p.Results.nonnegative;
 
 %% Experiment params
 verbose = p.Results.nonnegative;
-numUses = useAll + useRep + useNoRep; 
 
-nExp = length(sAlphas) + length(rAlphas) * numUses + ...
-    length(hAlphas) * length(hReps) * numUses + ...
-    length(pReps) * length(pLambdas) * length(pTols);
+nExp = length(sAlphas) ...
+    + length(rAlphas) * useAll ...
+    + length(rAlphas) * length(numreps) * (useRep + useNoRep) ...
+    + length(hAlphas) * useAll ...
+    + length(hAlphas) * length(numreps) * (useRep + useNoRep) ...
+    + length(numreps) * length(pLambdas) * length(pTols);
 N = length(labels);
 e = zeros(nExp, 1);
 m = zeros(nExp, 1);
@@ -66,105 +76,110 @@ par.tolerance = 1e-3;
 
 
 %% SSC
-for a = sAlphas
-    name = before(sprintf('SSC(a=%d)', a));
-    [C, ssc_pred] = SSC(x, r, affine, a, sOutlier, sRho, n);
-    [d(i), e(i), m(i), names{i}, cs{i}, rep{i}] = ...
-        after(name, ssc_pred, labels, C, 1:N, 0);
-    i = i + 1;
+if algo(1)
+    for a = sAlphas
+        name = before(sprintf('SSC(a=%d)', a));
+        [C, ssc_pred] = SSC(x, r, affine, a, sOutlier, sRho, n);
+        [d(i), e(i), m(i), names{i}, cs{i}, rep{i}] = ...
+            after(name, ssc_pred, labels, C, 1:N, 0);
+        i = i + 1;
+    end
 end
 
 %% RSSC
-for a = rAlphas
-    before('RSSC');
-    [rRep, rC] = rssc(x, a, r, affine, nonNegative, false);
-    [rNotRep, rInX, rOutX] = divide_dataset(x, rRep);
-    [rDur, ~, ~, ~, cs{i}, ~] = after([], [], [], rC, [], 0);
-    
-    % RSSC with all datapoints
-    if useAll
-        name = before(sprintf('RSSC_all(a=%d)', a));
-        [C_sym, ~] = BuildAdjacency(rC, sK);
-        rssc1_pred = SpectralClustering(C_sym, n);
-        [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
-            after(name, rssc1_pred, labels, [], 1:N, rDur);
-        i = i + 1;
-    end
-    
-    % RSSC with SSSC of representatives
-    if useRep
-        name = before(sprintf('RSSC_rep(a=%d)', a));
-        if length(rRep) > n
-            rSGrps = InSample(rInX, par.lambda, par.tolerance, par, par.nClass)';
-            rssc2_pred = InOutSample(rInX, rOutX, rRep, rNotRep, rSGrps, verbose);
+if algo(2)
+    for a = rAlphas
+        before('RSSC');
+        [rRep, rC] = rssc(x, a, r, affine, nonNegative, false);
+        [rNotRep, rInX, rOutX] = divide_dataset(x, rRep);
+        [rDur, ~, ~, ~, cs{i}, ~] = after([], [], [], rC, [], 0);
+
+        % RSSC with all datapoints
+        if useAll
+            name = before(sprintf('RSSC_all(a=%d)', a));
+            [C_sym, ~] = BuildAdjacency(rC, sK);
+            r1_pred = SpectralClustering(C_sym, n);
             [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
-                after(name, rssc2_pred', labels, [], rRep, rDur);
+                after(name, r1_pred, labels, [], 1:N, rDur);
+            i = i + 1;
         end
-        i = i + 1;
-    end
-    
-    % RSSC with SSSC of non-representatives
-    if useNoRep
-        name = before(sprintf('RSSC_no(a=%d)', a));
-        rssc3_pred = rssc_cluster(x, rRep, 0.2, n);
-        [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
-            after(name, rssc3_pred', labels, [], rNotRep, rDur);
-        i = i + 1;
+
+        
+        for numrep = numreps
+            % RSSC with SSSC of representatives
+            if useRep
+                name = before(sprintf('RSSC_rep(a=%d,r=%d)', a, numrep));
+                r2_pred = sssc(x, rRep, numrep, n, rLambda, rTol);
+                [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
+                    after(name, r2_pred', labels, [], rRep, rDur);
+                i = i + 1;
+            end
+
+            % RSSC with SSSC of non-representatives
+            if useNoRep
+                name = before(sprintf('RSSC_no(a=%d,r=%d)', a, numrep));
+                r3_pred = sssc(x, rNotRep, numrep, n, rLambda, rTol);
+                [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
+                    after(name, r3_pred', labels, [], rNotRep, rDur);
+                i = i + 1;
+            end
+        end
     end
 end
 
 %% SSSC
-pReps = check_reps(round(pReps * N), N);
-for pRep = pReps
-    for tol = pTols
-        for lambda = pLambdas
-            name = before(sprintf('SSSC(r=%d,t=%d,l=%d)', pRep, log10(tol), log10(lambda)));
-            [sssc_pred, reps, ~] = sssc(x, pRep, n, lambda, tol, nonNegative);
-            [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
-                after(name, sssc_pred, labels, [], reps, 0);
-            i = i + 1;
+if algo(3)
+    for numrep = numreps
+        for tol = pTols
+            for lambda = pLambdas
+                name = before(sprintf('SSSC(r=%d,t=%d,l=%d)', numrep, log10(tol), log10(lambda)));
+                [p_pred, pReps, ~] = sssc(x, 1:size(x, 2), numrep, n, lambda, tol);
+                [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
+                    after(name, p_pred', labels, [], pReps, 0);
+                i = i + 1;
+            end
         end
     end
 end
 
 %% HSSC
-hReps = check_reps(hReps, N);
-for a = hAlphas
-    name = before(sprintf('HSSC(a=%d)', a)); 
-    [hRep, hC] = hssc(x, a, affine, nonNegative, verbose);
-    [hNotRep, hInX, hOutX] = divide_dataset(x, hRep);
-    [hDur, ~, ~, ~, cs{i}, ~] = ...
-        after(name, [], [], hC, [], 0);
+if algo(4)
+    for a = hAlphas
+        name = before(sprintf('HSSC(a=%d)', a)); 
+        [hRep, hC] = hssc(x, a, affine, nonNegative, verbose);
+        [hNotRep, hInX, hOutX] = divide_dataset(x, hRep);
+        [hDur, ~, ~, ~, cs{i}, ~] = ...
+            after(name, [], [], hC, [], 0);
 
-    % HSSC with all datapoints
-    if useAll
-        name = before(sprintf('HSSC_all(a=%d)', a));
-        [hCSym, ~] = BuildAdjacency(hC, sK);
-        h1_pred = SpectralClustering(hCSym, n);
-        [d(i), e(i), m(i), names{i}, cs{i}, rep{i}] = ...
-            after(name, h1_pred, labels, hC, 1:N, hDur);
-        i = i + 1;
-    end
-
-    % HSSC with SSSC of representatives
-    if useRep
-        name = before(sprintf('HSSC_rep(a=%d)', a));
-        if length(hRep) > n
-            hSGrps = InSample(hInX, par.lambda, par.tolerance, par, par.nClass)';
-            h2_pred = InOutSample(hInX, hOutX, hRep, hNotRep, hSGrps, verbose);
-            [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
-                after(name, h2_pred', labels, [], hRep, hDur);
+        % HSSC with all datapoints
+        if useAll
+            name = before(sprintf('HSSC_all(a=%d)', a));
+            [hCSym, ~] = BuildAdjacency(hC, sK);
+            h1_pred = SpectralClustering(hCSym, n);
+            [d(i), e(i), m(i), names{i}, cs{i}, rep{i}] = ...
+                after(name, h1_pred, labels, hC, 1:N, hDur);
+            i = i + 1;
         end
-        i = i + 1;
-    end
 
-    % HSSC with SSSC of non-representatives
-    if useNoRep
-        name = before(sprintf('HSSC_no(a=%d)', a));
-        h3_pred = rssc_cluster(x, hRep, 0.2, n);
-        [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
-            after(name, h3_pred', labels, [], hNotRep, hDur);
-        i = i + 1;
+        for numrep = numreps
+            % HSSC with SSSC of representatives
+            if useRep
+                name = before(sprintf('HSSC_rep(a=%d,r=%d)', a, numrep));
+                h2_pred = sssc(x, numrep, numrep, n, hLambda, hTol);
+                [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
+                    after(name, h2_pred', labels, [], hRep, hDur);
+                i = i + 1;
+            end
+
+            % HSSC with SSSC of non-representatives
+            if useNoRep
+                name = before(sprintf('HSSC_no(a=%d,r=%d)', a, numrep));
+                h3_pred = sssc(x, hNotRep, numrep, n, hLambda, hTol);
+                [d(i), e(i), m(i), names{i}, ~, rep{i}] = ...
+                    after(name, h3_pred', labels, [], hNotRep, hDur);
+                i = i + 1;
+            end
+        end
     end
 end
 

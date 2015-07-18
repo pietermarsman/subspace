@@ -15,7 +15,7 @@ xlab = xlabel(xlab);
 ylab = ylabel(ylab);
 zlab = zlabel(zlab);
 
-set([xlab, ylab, zlab], 'FontSize', 15, 'FontWeight', 'Bold');
+set([xlab, ylab, zlab], 'FontSize', 12, 'FontWeight', 'Bold');
 grey = [.3, .3, .3];
 set(gca, ...
     'FontName', 'helvetica', ...
