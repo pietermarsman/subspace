@@ -1,11 +1,10 @@
 clean
-dir = 'fig'
-name = 'data/param_gen_7361639564.mat';
+dir = 'fig';
+name = 'data/param_gen_7361655342.mat';
 load(name)
 
 %% Selection
-names = names(1:end-2);
-selection = cellfun(@(x) strcmp(x(1:4), 'SSSC'), names)
+selection = cellfun(@(x) strcmp(x(1:7), 'RSSC_re'), names)
 
 names = names(selection);
 err = err(selection, :);
@@ -17,9 +16,9 @@ rep = rep ./ repmat(Ns, size(rep, 1), 1);
 exp_N = length(names)
 
 %% Information
-tit = 'Generated linspaces - SSSC';
-xlab = ''; %'Alpha';
-xvalues = names;
+tit = 'Generated linspace - RSSC with representatives';
+xlab = 'Alpha';
+xvalues = [1.01, 1.05:0.05:1.5, 1.6:0.1:2.0];
 ratio = [2, 1, 1];
 position = [0 0 800 800] ;
 
@@ -136,7 +135,7 @@ fprintf('Best mutual info: \t%s\t=  %.3f\t%.3f\n', names{mut_best}, median(mut(m
 fprintf('Best duration: \t\t%s\t=  %.3f\t%.3f\n', names{dur_best}, median(dur(dur_best, :)), mean(dur(dur_best, :)));
 
 fprintf('\nSimilarity: \n     ')
-fprintf('%21s', names{:})
+fprintf('%.21s', names{:})
 fprintf('\nError: ')
 fprintf('%3f             ', err_cp(err_best, :))
 fprintf('\nMutIn: ')
