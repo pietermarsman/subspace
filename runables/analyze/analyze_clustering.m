@@ -1,12 +1,10 @@
 clean
 dir = 'fig';
-name = 'data/param_hopkins_7361654963.mat';
+name = 'data/clustering_comp_yale_736165643.mat';
 load(name)
 
 %% Selection
-names{17} = 'invalid';
-names{18} = 'invalid';
-selection = cellfun(@(x) strcmp(x(1:7), 'RSSC_no'), names)
+selection = 1:length(names); %cellfun(@(x) strcmp(x(1:7), 'RSSC_no'), names)
 
 names = names(selection);
 err = err(selection, :);
@@ -18,9 +16,9 @@ rep = rep ./ repmat(Ns, size(rep, 1), 1);
 exp_N = length(names)
 
 %% Information
-tit = 'Hopkins155 - RSSC with non-representatives';
-xlab = 'Alpha';
-xvalues = alphas([1:9, 11:19]); %[1.01, 1.05:0.05:1.5, 1.6:0.1:2.0];
+tit = 'Generated linear subspace';
+xlab = '';
+xvalues = names; %alphas([1:9, 11:19]); %[1.01, 1.05:0.05:1.5, 1.6:0.1:2.0];
 ratio = [2, 1, 1];
 position = [0 0 800 800] ;
 
@@ -97,13 +95,13 @@ export_fig(name, '-pdf', '-transparent')
 %% Analyzes
 clc;
 fprintf('==Normality test==\n')
-fprintf('\t\t  Error\t\tMutual info\tDuration\tIn-sample size\n')
+fprintf('%30s  Error\t\tMutual info\tDuration\tIn-sample size\n', '')
 for i = 1:length(names)
     [err_h, err_p] = kstest(err(i, :));
     [mut_h, mut_p] = kstest(mut(i, :));
     [dur_h, dur_p] = kstest(dur(i, :));
     [rep_h, rep_p] = kstest(rep(i, :));
-    fprintf('%16s  %.5f \t%.5f \t%.5f \t%.5f\n', names{i}, err_p, mut_p, dur_p, rep_p);
+    fprintf('%30s  %.5f \t%.5f \t%.5f \t%.5f\n', names{i}, err_p, mut_p, dur_p, rep_p);
 end
 
 fprintf('\n==Kruskal-Wallis test==\n')
@@ -131,13 +129,13 @@ mut_cp = mut_cp + mut_cp';
 dur_cp = dur_cp + dur_cp';
 rep_cp = rep_cp + rep_cp';
 
-fprintf('\t\t\t\t\t\t   Median\tMean\n')
-fprintf('Best error: \t\t%s\t=  %.3f\t%.3f\n', names{err_best}, median(err(err_best, :)), mean(err(err_best, :)));
-fprintf('Best mutual info: \t%s\t=  %.3f\t%.3f\n', names{mut_best}, median(mut(mut_best, :)), mean(mut(mut_best, :)));
-fprintf('Best duration: \t\t%s\t=  %.3f\t%.3f\n', names{dur_best}, median(dur(dur_best, :)), mean(dur(dur_best, :)));
+fprintf('%51sMedian\tMean\n', '')
+fprintf('%16s: %30s = %.3f\t%.3f\n', 'Best error', names{err_best}, median(err(err_best, :)), mean(err(err_best, :)));
+fprintf('%16s: %30s = %.3f\t%.3f\n', 'Best mutual info', names{mut_best}, median(mut(mut_best, :)), mean(mut(mut_best, :)));
+fprintf('%16s: %30s = %.3f\t%.3f\n', 'Best duration', names{dur_best}, median(dur(dur_best, :)), mean(dur(dur_best, :)));
 
-fprintf('\nSimilarity: \n     ')
-fprintf('%.21s', names{:})
+fprintf('\nSimilarity: \n       ')
+fprintf('%.21s ', names{:})
 fprintf('\nError: ')
 fprintf('%3f             ', err_cp(err_best, :))
 fprintf('\nMutIn: ')

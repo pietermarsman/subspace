@@ -19,7 +19,7 @@ params = {'sAlphas', [20], ...
 algos = true(1, 4);
 
 %% SETUP
-[savefile] = setup_save('clustering_comp_gen');
+[savefile] = setup_save('clustering_comp_yale');
 
 %% EXPERIMENT
 exp_dataset()

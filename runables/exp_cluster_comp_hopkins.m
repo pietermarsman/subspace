@@ -21,7 +21,7 @@ params = {'sAlphas', [800], ...
 algos = true(1, 4);
 
 %% SETUP
-[savefile] = setup_save('clustering_comp_gen');
+[savefile] = setup_save('clustering_comp_hopkins');
 
 %% EXPERIMENT
 exp_dataset()
