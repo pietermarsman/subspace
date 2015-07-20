@@ -31,8 +31,7 @@ fprintf('==%s==', savefile)
 
 parfor i = 1:length(cosses)
 %     try
-        dataparams = {dataparams{:}, 'cos', cosses(i), 'noise', noises(i)};
-        [ x, labels, N, d, n, D, noise, cos ] = get_data(dataset{1}, dataparams{:});
+        [ x, labels, N, d, n, D, noise, cos ] = get_data(dataset{1}, dataparams{:}, 'cos', cosses(i), 'noise', noises(i));
         fprintf('\nExperiment %d/%d with N=%d, n=%d, d=%d, D=%d and noise=%s\n> ', ...
             i, length(cosses), N, n, d, D, noise)
         [err(:, i), mut(:, i), dur(:, i), pred{i}, cs{i}, rep{i}, names{i}] ...
