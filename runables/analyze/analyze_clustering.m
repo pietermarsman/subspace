@@ -1,10 +1,11 @@
 clean
 dir = 'fig';
-name = 'data/param_yale_7361639566.mat';
+name = 'data/param_hopkins_7361654963.mat';
 load(name)
 
 %% Selection
-names = names(1:end-4);
+names{17} = 'invalid';
+names{18} = 'invalid';
 selection = cellfun(@(x) strcmp(x(1:7), 'RSSC_no'), names)
 
 names = names(selection);
@@ -17,9 +18,9 @@ rep = rep ./ repmat(Ns, size(rep, 1), 1);
 exp_N = length(names)
 
 %% Information
-tit = 'Generated linspace - RSSC with non-representatives';
+tit = 'Hopkins155 - RSSC with non-representatives';
 xlab = 'Alpha';
-xvalues = alphas; %[1.01, 1.05:0.05:1.5, 1.6:0.1:2.0];
+xvalues = alphas([1:9, 11:19]); %[1.01, 1.05:0.05:1.5, 1.6:0.1:2.0];
 ratio = [2, 1, 1];
 position = [0 0 800 800] ;
 
