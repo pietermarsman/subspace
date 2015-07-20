@@ -1,13 +1,11 @@
 clean
 dir = 'fig'
-name = 'data/param_hopkins_7361639569.mat';
+name = 'data/param_gen_7361639564.mat';
 load(name)
 
 %% Selection
-names = names(1:end-3);
-names{17} = 'invalid';
-names{18} = 'invalid'
-selection = cellfun(@(x) strcmp(x(1:7), 'RSSC_no'), names);
+names = names(1:end-2);
+selection = cellfun(@(x) strcmp(x(1:4), 'SSSC'), names)
 
 names = names(selection);
 err = err(selection, :);
@@ -19,9 +17,9 @@ rep = rep ./ repmat(Ns, size(rep, 1), 1);
 exp_N = length(names)
 
 %% Information
-tit = 'Hopkins155 - RSSC with non-representatives';
-xlab = 'Alpha';
-xvalues = alphas([1:8, 10:19]);
+tit = 'Generated linspaces - SSSC';
+xlab = ''; %'Alpha';
+xvalues = names;
 ratio = [2, 1, 1];
 position = [0 0 800 800] ;
 
