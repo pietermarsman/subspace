@@ -109,7 +109,7 @@ else
         C1 = C2;
         i = i + 1;
     end
-    if (verbose)
-        fprintf('err1: %2.4f, err2: %2.4f, err3: %2.4f, iter: %3.0f \n',err1(end),err2(end),err3(end),i);
-    end
+%     if (verbose)
+%         fprintf('err1: %2.4f, err2: %2.4f, err3: %2.4f, iter: %3.0f \n',err1(end),err2(end),err3(end),i);
+%     end
 end
