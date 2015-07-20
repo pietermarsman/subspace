@@ -1,10 +1,11 @@
 clean
 dir = 'fig';
-name = 'data/clustering_comp_yale_736165643.mat';
+name = 'data/clustering_comp_yale_7361656697.mat';
 load(name)
 
 %% Selection
-selection = 1:length(names); %cellfun(@(x) strcmp(x(1:7), 'RSSC_no'), names)
+selection = [1, 2, 5, 6, 7, 10]; %cellfun(@(x) strcmp(x(1:7), 'RSSC_no'), names)
+
 
 names = names(selection);
 err = err(selection, :);
@@ -16,7 +17,7 @@ rep = rep ./ repmat(Ns, size(rep, 1), 1);
 exp_N = length(names)
 
 %% Information
-tit = 'Generated linear subspace';
+tit = 'Extended Yale B (10 classes)';
 xlab = '';
 xvalues = names; %alphas([1:9, 11:19]); %[1.01, 1.05:0.05:1.5, 1.6:0.1:2.0];
 ratio = [2, 1, 1];
@@ -92,8 +93,15 @@ name = [dir, '/', savetitle, '_insamplesize'];
 savefig(name)
 export_fig(name, '-pdf', '-transparent')
 
-%% Analyzes
+%% Descriptives
 clc;
+fprintf('==Descriptives==\n')
+fprintf('%40s\tError \tMutInf \tDurati \tIn-sample size\n', '')
+for i = 1:length(names)
+    fprintf('%40s\t%.4f \t%.4f \t%.3f \t%.3f\n', names{i}, mean(err(i, :)), mean(mut(i, :)), mean(dur(i, :)), mean(rep(i, :)));
+end
+
+%% Analyzes
 fprintf('==Normality test==\n')
 fprintf('%30s  Error\t\tMutual info\tDuration\tIn-sample size\n', '')
 for i = 1:length(names)
