@@ -5,7 +5,8 @@ function savefile = exp_cluster_comp_hopkins( repeats )
 %   dataparams = description for generation of data (dataset 1)
 
 %% PARAMS
-dataset = {1}
+dataset = load('datasets/hopkins_names')
+dataset = dataset.dataset;
 dataparams = {};
 verbose = true
 params = {'sAlphas', [800], ...
@@ -30,4 +31,5 @@ exp_dataset()
 post_process();
 
 %% SAVING
+clearvars cs
 save(savefile)

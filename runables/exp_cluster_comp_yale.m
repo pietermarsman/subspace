@@ -28,4 +28,5 @@ exp_dataset()
 post_process();
 
 %% SAVING
+clearvars cs
 save(savefile)
