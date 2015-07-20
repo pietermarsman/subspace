@@ -6,6 +6,7 @@ function savefile = exp_cluster_comp_hopkins( repeats )
 
 %% PARAMS
 dataset = {1}
+dataparams = {};
 verbose = true
 params = {'sAlphas', [800], ...
     'affine', true, ...
