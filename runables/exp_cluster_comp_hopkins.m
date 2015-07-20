@@ -1,4 +1,4 @@
-function savefile = exp_cluster_comp_gen( repeats )
+function savefile = exp_cluster_comp_hopkins( repeats )
 %EXPERIMENT 
 %   Example use: workspace; clean; savefile=exp_cluster_comp({1, 2, 'cars1'}, {'Ni', 3}, 2);
 %   dataset = cell array with dataset descriptions, e.g. {1, 2, 'cars1'}
