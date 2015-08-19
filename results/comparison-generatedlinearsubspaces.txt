@@ -1,0 +1,25 @@
+==Descriptives==
+                                        	Error 	MutInf 	Durati 	In-sample size
+                  RSSC^{NO}(a=1.05,r=50)	0.0132 	0.9422 	5.258 	0.987
+                 RSSC^{REP}(a=1.80,r=50)	0.0122 	0.9444 	3.121 	1.000
+                    SSSC(r=50,t=-3,l=-4)	0.0150 	0.9424 	1.546 	0.100
+==Normality test==
+                                Error		Mutual info	Duration	In-sample size
+        RSSC^{NO}(a=1.05,r=50)  0.00000 	0.00000 	0.00000 
+       RSSC^{REP}(a=1.80,r=50)  0.00000 	0.00000 	0.00000 
+          SSSC(r=50,t=-3,l=-4)  0.00000 	0.00000 	0.00000 
+
+==Kruskal-Wallis test==
+Group medians differ for error (0.91604), mutual info (0.90581), duration (0.00000) 
+
+==Pair wise testing==
+                                                   Median	Mean
+      Best error:           SSSC(r=50,t=-3,l=-4) = 0.010	0.015
+Best mutual info:           SSSC(r=50,t=-3,l=-4) = 0.952	0.942
+   Best duration:           SSSC(r=50,t=-3,l=-4) = 1.437	1.546
+
+Similarity: 
+       RSSC^{NO}(a=1.05,r=50) RSSC^{REP}(a=1.80,r=50) SSSC(r=50,t=-3,l=-4) 
+Error: 0.909314             0.985817             0.000000             
+MutIn: 0.911485             0.933175             0.000000             
+Durat: 0.000000             0.000000             0.000000             

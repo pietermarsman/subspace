@@ -56,8 +56,8 @@ par.nClass             =   length(unique(labels));
 par                    =   L1ParameterConfig(par);
 
 % --- dimension reduction using PCA
+par.nDim = size(DATA, 1);
 dat = FeatureEx(DATA, par);
-clear DATA;
 
 % --- split the data into two parts for landmark and non-landmark
 Tr_dat = dat(:,landmark_ID(1:par.landmarkNO)); % the landmark data;

@@ -17,6 +17,7 @@ addpath('libraries/SMRS_v1.0')
 % addpath('libraries/SSC_1.0')
 addpath('libraries/SSC_ADMM_v1.1')
 addpath(genpath('libraries/SSSC_code&Data_CVPR2013'))
+addpath('libraries/sigstar')
 
 rng shuffle;
 

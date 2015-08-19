@@ -17,7 +17,7 @@ for i = [1:subsets]
     subset_end = round(s*i);
     subset_idx = idx(subset_start:subset_end);
     [subset_rep, subset_C] = rssc(Y(:, subset_idx), alpha, 0, affine, ...
-        nonNegative, false);
+        nonNegative, verbose);
     hssc_repInd = [hssc_repInd, subset_idx(subset_rep)];
     hssc_C(subset_idx, subset_idx) = subset_C;
 end
@@ -29,9 +29,10 @@ if size(hssc_repInd, 2) >= size(Y, 2)
     end
 end
 % if size(hssc_repInd, 2) > max_rep
-%     [repInd2, C2_] = hssc(Y(:, hssc_repInd), alpha, max_rep, nonNegative, verbose);
-%     C(hssc_repInd, :) = C2_ * hssc_C(hssc_repInd, :);
-%     repInd = hssc_repInd(repInd2);
+% hssc_repInd
+% [repInd2, C2_] = rssc(Y(:, hssc_repInd), alpha, 0, affine, nonNegative, verbose);
+% C(hssc_repInd, :) = C2_ * hssc_C(hssc_repInd, :);
+% repInd = hssc_repInd(repInd2);
 % else
 repInd = hssc_repInd;
 C = hssc_C;

@@ -1,4 +1,4 @@
-function [u, rot, x, labels] = linear_subspace(N, d, S, D, cos_theta, noise)
+function [u, rot, x, labels] = linear_subspace(N, d, S, D, cos_theta, noise, var)
 
 isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
 if isOctave
@@ -10,7 +10,12 @@ actual_N = round(N / S);
 u = [];
 labels = [];
 for i=[1:S]
-    u(:, :, i) = rand(d, actual_N);
+%     s = rand(d, 1);
+%     s = s - min(s) + noise;
+%     u(:, :, i) = rand(d, actual_N);
+    s = repmat([var^2], d, 1);
+    u(:, :, i) = mvnrnd(zeros(d, 1), diag(s), actual_N)';
+    u(:, :, i) = u(:, :, i) - min(min(u(:, :, i))) + var^2;
     labels = [labels, repmat(i, 1, actual_N)];
 end
 

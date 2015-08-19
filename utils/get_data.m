@@ -15,6 +15,7 @@ parse(p,varargin{:});
 dataset_id = p.Results.dataset;
 noise = p.Results.noise;
 cos = p.Results.cos;
+var = 1.0;
 N = p.Results.N;
 D = p.Results.D;
 d = p.Results.Di;
@@ -22,16 +23,16 @@ n = p.Results.Ni;
 
 % Dataset
 if dataset_id == 1
-    [~, ~, x, labels] = linear_subspace(N, d, n, D, cos, noise);
+    [~, ~, x, labels] = linear_subspace(N, d, n, D, cos, noise, var);
 elseif dataset_id == 2
     load('datasets/YaleBCrop025.mat');
     d = 11;
     noise = -1;
     cos = -1;
-    idx = randperm(10, n);
+    idx = randperm(38, n);
     yaleX = Y(:, :, idx);
     x = reshape(yaleX, size(yaleX, 1), []);
-    labels = s{n};
+    labels = reshape(repmat(1:n, 64, 1), 1, []);
 elseif ischar(dataset_id)
     data = load('datasets/Hopkins155.mat', 'hopkins');
     hopkins = data.hopkins;

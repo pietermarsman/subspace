@@ -47,6 +47,7 @@ function dat = FeatureEx(DATA, par)
 if par.nDim < size(DATA, 1)
     [disc_set,disc_value,Mean_Image]  =  Eigenface_f(DATA,par.nDim);
     dat  =  disc_set'*DATA;
+    size(dat)
 else
     dat = DATA;
 end;
