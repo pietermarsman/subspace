@@ -8,10 +8,10 @@ function savefile = exp_cluster_cosreps( dataparams, repeats )
 dataset = {1}
 verbose = true
 params = {'sAlphas', [20], ...
-    'rAlphas', [1.05, 1.8], ...
+    'rAlphas', [2], ...
     'rLambda', 1e-4, ...
     'rTol', 1e-3, ...
-    'hAlphas', [1.05, 1.8], ...
+    'hAlphas', [2], ...
     'pLambdas', 1e-4, ...
     'pTols', 1e-3 ...
     };
@@ -32,23 +32,23 @@ reps = repmat(reps(:), repeats, 1);
 fprintf('==%s==', savefile)
 
 parfor i = 1:length(cosses)
-%     try
+    try
         [ x, labels, N, d, n, D, noise, cos ] = get_data(...
             dataset{1}, dataparams{:}, 'cos', cosses(i), 'N', N_set);
         fprintf('\nExperiment %d/%d with N=%d, n=%d, d=%d, D=%d, cos=%d and noise=%g\n> ', ...
             i, length(cosses), N, n, d, D, cos, noise)
         [err(:, i), mut(:, i), dur(:, i), pred{i}, cs{i}, rep{i}, names{i}] ...
             = experiment(x, labels, n, algos, params{:}, 'numreps', reps(i));
-%     catch ME
-%         warning(ME.message)
-%         err(:, i) = -1;
-%         mut(:, i) = -1;
-%         dur(:, i) = -1;
-%         pred{i} = ME.message;
-%         cs{i} = ME.message;
-%         rep{i} = ME.message;
-%         names{i}{1} = ME.message;
-%     end
+    catch ME
+        warning(ME.message)
+        err(:, i) = -1;
+        mut(:, i) = -1;
+        dur(:, i) = -1;
+        pred{i} = ME.message;
+        cs{i} = ME.message;
+        rep{i} = ME.message;
+        names{i}{1} = ME.message;
+    end
 end
 
 %% POST PROCESS
