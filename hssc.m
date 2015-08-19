@@ -30,9 +30,9 @@ if size(hssc_repInd, 2) >= size(Y, 2)
 end
 % if size(hssc_repInd, 2) > max_rep
 % hssc_repInd
-% [repInd2, C2_] = rssc(Y(:, hssc_repInd), alpha, 0, affine, nonNegative, verbose);
-% C(hssc_repInd, :) = C2_ * hssc_C(hssc_repInd, :);
-% repInd = hssc_repInd(repInd2);
+[repInd2, C2_] = rssc(Y(:, hssc_repInd), alpha, 0, affine, nonNegative, verbose);
+C(hssc_repInd, :) = C2_ * hssc_C(hssc_repInd, :);
+repInd = hssc_repInd(repInd2);
 % else
 repInd = hssc_repInd;
 C = hssc_C;
