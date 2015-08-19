@@ -2,16 +2,11 @@ clean
 
 %% Load data
 name = 'data/clustering_comp_gen_7361656695.mat'; genlibsub = load(name, 'rep', 'names'); % genlibsub
-name = 'data/clustering_comp_yale3_7361955833.mat'; yale = load(name, 'rep'); % Yale
-name = 'data/clustering_comp_hopkins_7361656698.mat'; hopkins = load(name, 'rep'); hopkins.rep(99) = []; % Hopkins
+name = 'data/clustering_comp_yale3_7361955833.mat'; yale = load(name, 'rep', 'names'); yale.rep(5) = []; % Yale Ni=3
+% name = 'data/clustering_comp_yale_7361656697.mat'; yale = load(name, 'rep', 'names'); % Yale Ni=5
+name = 'data/clustering_comp_hopkins_7361656698.mat'; hopkins = load(name, 'rep', 'names'); hopkins.rep(99) = []; % Hopkins
 
 %% Information
-rssc_i = 4;
-hssc_i = 9;
-ssc_i = 1;
-names = genlibsub.names;
-selection = [rssc_i, hssc_i];
-
 save_pre = 'representatives_'
 dir = 'results'
 datasets = {'Generated linear subspaces', 'Hopkins 155', 'Extended Yale B'};
@@ -22,6 +17,9 @@ dataset_i = 1;
 for dataset = {genlibsub, hopkins, yale}
     dataset = dataset{1};
     idx_pos{dataset_i} = [];
+    rssc_i = find(cellfun(@(x) length(strfind(x,'RSSC_rep')) > 0, dataset.names));
+    hssc_i = find(cellfun(@(x) length(strfind(x,'HSSC_rep')) > 0, dataset.names));
+    selection = [rssc_i(2), hssc_i(2)];
     for i = 1:length(dataset.rep)
         dataset.rep{i} = dataset.rep{i}(selection);
         rssc_repInd = dataset.rep{i}{1};
@@ -53,7 +51,6 @@ end
 fprintf('\n')
 
 %% SELECTION
-names = names(selection);
 % Representatives of HSR are not sorted but concatenated. Therefore it is 
 % assumed that the first half of the representatives are from one subset
 % and the second half from the other. But this is actually not true and
