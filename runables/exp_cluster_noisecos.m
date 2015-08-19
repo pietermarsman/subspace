@@ -25,8 +25,8 @@ noises = [0:.001:0.02];
 
 %% EXPERIMENT
 [cosses, noises] = meshgrid(cosses, noises);
-cosses = repmat(cosses(:), 1, repeats);
-noises = repmat(noises(:), 1, repeats);
+cosses = repmat(cosses(:), repeats, 1);
+noises = repmat(noises(:), repeats, 1);
 fprintf('==%s==', savefile)
 
 parfor i = 1:length(cosses)
