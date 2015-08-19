@@ -2,7 +2,7 @@ clean
 
 %% Load data
 name = 'data/clustering_comp_gen_7361656695.mat'; genlibsub = load(name, 'rep', 'names'); % genlibsub
-name = 'data/clustering_comp_yale_7361656697.mat'; yale = load(name, 'rep'); % Yale
+name = 'data/clustering_comp_yale3_7361955833.mat'; yale = load(name, 'rep'); % Yale
 name = 'data/clustering_comp_hopkins_7361656698.mat'; hopkins = load(name, 'rep'); hopkins.rep(99) = []; % Hopkins
 
 %% Information

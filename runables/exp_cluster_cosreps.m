@@ -27,8 +27,8 @@ reps = Ni * (d+1) / N * [.5, 1, 1.5];
 
 %% EXPERIMENT
 [cosses, reps] = meshgrid(cosses, reps);
-cosses = repmat(cosses(:), 1, repeats);
-reps = repmat(reps(:), 1, repeats);
+cosses = repmat(cosses(:), repeats, 1);
+reps = repmat(reps(:), repeats, 1);
 fprintf('==%s==', savefile)
 
 for i = 1:length(cosses)
