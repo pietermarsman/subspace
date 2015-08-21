@@ -10,12 +10,10 @@ actual_N = round(N / S);
 u = [];
 labels = [];
 for i=[1:S]
-%     s = rand(d, 1);
-%     s = s - min(s) + noise;
-%     u(:, :, i) = rand(d, actual_N);
-    s = repmat([var^2], d, 1);
-    u(:, :, i) = mvnrnd(zeros(d, 1), diag(s), actual_N)';
-    u(:, :, i) = u(:, :, i) - min(min(u(:, :, i))) + var^2;
+    u(:, :, i) = rand(d, actual_N);
+%     s = repmat([var^2], d, 1);
+%     u(:, :, i) = mvnrnd(zeros(d, 1), diag(s), actual_N)';
+%     u(:, :, i) = u(:, :, i) - min(min(u(:, :, i))) + var^2;
     labels = [labels, repmat(i, 1, actual_N)];
 end
 

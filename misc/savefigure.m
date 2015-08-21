@@ -9,7 +9,7 @@ savename = [dir, '/', name];
 original = [dir, '/original/', name];
 
 savefig(original);
-export_fig(savename, '-pdf', '-transparent');
+export_fig(savename, '-png', '-transparent');
 
 end
 

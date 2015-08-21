@@ -36,10 +36,18 @@ for dataset_i = 1:length(rssc_dur)
     group = [group, repmat(dataset_i, 1, length(rssc_dur{dataset_i}))];
 end
 
+%% Statistics
+fprintf('Significant difference in duration\n');
+for dataset_i = 1:length(rssc_dur)
+    [p, ~] = kruskalwallis([rssc_dur{dataset_i}', ...
+        hssc_dur{dataset_i}'], {'RSSC', 'HSSC'}, 'off');
+    fprintf('%30s : %f\n', datasets{dataset_i}, p)
+end
+
 %% Plot
 fig = figure(1)
 boxplot(dur, group, 'labels', datasets)
-beautyplot('', 'Duration HSR / RSSC', '', false, false);
+beautyplot('', 'Duration HSR / SMRS', '', false, false);
 set(fig, 'Position', position);
 set(gca, 'PlotBoxAspectRatio', ratio)
 

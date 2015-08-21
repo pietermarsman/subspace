@@ -18,6 +18,7 @@ unique_noises = sort(unique(noises));
 
 conf = zeros(length(unique_cosses), length(unique_noises), 4);
 for cos_i = 1:length(unique_cosses)
+    fprintf('cos = %f\n', unique_cosses(cos_i));
     for noise_i = 1:length(unique_noises)
         idx = and(cosses == unique_cosses(cos_i), noises == unique_noises(noise_i));
         avg(cos_i, noise_i, :) = mean(err(:, idx), 2);
@@ -60,19 +61,19 @@ close all
 for name_i = selection
     figure(name_i)
     data = avg(:, :, name_i);
-    imagesc(fliplr(data), [0, 1]);
+    imagesc(data, [0, 1]);
     
     name = strrep(names{name_i}, '_', ' ');
     name = strrep(name, '(', ' (');
-    title(name)
+%     title(name)
     
     yticks = unique([1, 1:2:11, 11]);
     set(gca, 'YTick', yticks);
     set(gca, 'YTickLabel', unique_cosses(yticks));
-    xticks = unique([1, 1:3:21, 21]);
+    xticks = unique([1:4:21, 21]);
     set(gca, 'XTick', xticks);
-    set(gca, 'XTickLabel', unique_noises(sort(xticks, 2, 'descend')));
-    beautyplot('Noise', 'Cosine', '', false, false);
+    set(gca, 'XTickLabel', unique_noises(xticks));
+    beautyplot('$\epsilon^2$', '$\cos(\theta_{ij})$', '', false, true);
     
     savetitle = ['/noisecos_', strrep(names{name_i}, '.', '')];
     savefigure(dir, savetitle);

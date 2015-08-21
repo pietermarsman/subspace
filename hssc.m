@@ -34,8 +34,8 @@ end
 C(hssc_repInd, :) = C2_ * hssc_C(hssc_repInd, :);
 repInd = hssc_repInd(repInd2);
 % else
-repInd = hssc_repInd;
-C = hssc_C;
+% repInd = hssc_repInd;
+% C = hssc_C;
 % end
 
 end

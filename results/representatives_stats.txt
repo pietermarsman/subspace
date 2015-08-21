@@ -1,10 +1,10 @@
 
 == Correlation == 
-    Generated linear subspaces : 0.985855
-                   Hopkins 155 : 0.977638
-               Extended Yale B : 0.734235
+    Generated linear subspaces : 0.985978
+                   Hopkins 155 : 0.976759
+               Extended Yale B : 0.728149
 == Error statistics ==
-                                  p-value,    kstat,     mean,      std
-    Generated linear subspaces : 0.000000, 0.055549, -0.001986, 0.048459
-                   Hopkins 155 : 0.000000, 0.073441, -0.002725, 0.060827
-               Extended Yale B : 0.000000, 0.043479, -0.014208, 0.214124
+                                  p-value,    kstat,     mean,      std, accuracy, precision
+    Generated linear subspaces : 0.000000, 0.056272, 0.000000, 0.048440, 1.000000
+                   Hopkins 155 : 0.000000, 0.079328, 0.005339, 0.061612, 0.903946
+               Extended Yale B : 0.000000, 0.035334, 0.054197, 0.205409, 0.750947

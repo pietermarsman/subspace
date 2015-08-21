@@ -1,15 +1,15 @@
 hull_plot = true;
 close all;
-dir = 'fig/dim';
+dir = 'results/dim';
 mkdir(dir);
 S = 1;
 
-view_3d = {3, [-45, 25]};
+view_3d = {3, [-10, 25]};
 
 for D = [S:3]
     for d = [1:D/S]
         clf;
-        [u, rot, x, ~] = linear_subspace(50, d, S, D, 0.2, 0.0);
+        [u, rot, x, ~] = linear_subspace(50, d, S, D, 0.5, 0.0, 1.0);
         
         if D == 3
             scatter3(x(1, :), x(2, :), x(3, :));
@@ -21,10 +21,10 @@ for D = [S:3]
         if d >= 2
             ind = convhulln(u');
             if hull_plot
-                plot_hull(x', ind);
+                plot_hull(x', ind, 'b');
             end
         end
-        beautyplot('x', 'y', 'z');
+        beautyplot('x', 'y', 'z', true, false);
         name = [dir, sprintf('/D%dd%dS%d', D, d, S)];
         savefig(name);
         if D == 3

@@ -5,6 +5,7 @@ function [ mat ] = rep2mat( rep, N )
 matcell = cellfun(@(x) full(ind2vec(x, N)), rep, 'UniformOutput', false);
 matcell = cellfun(@(x) repmat(linspace(1, 2, size(x, 2)), size(x, 1), 1) .* x, matcell, 'UniformOutput', false);
 mat = cell2mat(cellfun(@(x) sum(x, 2)', matcell, 'UniformOutput', false));
+mat = mat - 1;
 
 end
 

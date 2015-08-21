@@ -1,16 +1,19 @@
 
 %% LOAD data
 clean;
-
-name = 'data/cluster_cosreps_736195737.mat'; load(name);
+name = 'data/cluster_cosreps_7361959905.mat'; load(name);
 
 %% Info 
 dir = 'results';
+pretit = 'cosreps_nonoise_'
 pred_size = 501;
 
 %% SELECTION
-selection = [3, 5, 8];
-rep_selection = [3, 8];
+rssc_i = 1;
+sssc_i = 3;
+hssc_i = 4;
+selection = [rssc_i, sssc_i, hssc_i];
+rep_selection = [rssc_i, hssc_i];
 
 %% AGGREGATE
 
@@ -29,44 +32,58 @@ for cos_i = 1:length(unique_cosses)
 
     repeats = sum(idx);
     index = 1;
-    norm_index{cos_i} = [];    
+    norm_index{cos_i} = [];
+    idx = and(cosses == unique_cosses(cos_i), reps >= unique_reps(2));
     for repeat_i = find(idx)'
-%         rssc_reps = rep{repeat_i}{3};
-%         hssc_reps = rep{repeat_i}{8};
-%         nn = size(pred{repeat_i}, 2);
-%         pospos = intersect(rssc_reps, hssc_reps);
-%         posneg = setdiff(rssc_reps, hssc_reps);
-%         negpos = setdiff(hssc_reps, rssc_reps);
-%         negneg = setdiff(setdiff(1:nn, rssc_reps), hssc_reps);
-%         conf(cos_i, 1, index) = length(pospos);
-%         conf(cos_i, 2, index) = length(posneg);
-%         conf(cos_i, 3, index) = length(negpos);
-%         conf(cos_i, 4, index) = length(negneg);
-%         index = index + 1;
+        repp = rep2mat(rep{repeat_i}, pred_size);
+        positive = sum(repp(rep_selection, :) >= 0, 1) >= 2;
+        norm_index{cos_i} = [norm_index{cos_i}; repp(rep_selection, positive)'];
         
-        repmat = rep2mat(rep{repeat_i}, pred_size);
-        nonzero = sum(repmat(rep_selection, :) > 1, 1) >= 2;
-        norm_index{cos_i} = [norm_index{cos_i}, repmat(rep_selection, nonzero)];
+        conf(cos_i, 1, index) = sum((repp(rssc_i, :) >= 0) .* (repp(hssc_i, :) >= 0));
+        conf(cos_i, 2, index) = sum((repp(rssc_i, :) > 0) .* (repp(hssc_i, :) < 0));
+        conf(cos_i, 3, index) = sum((repp(rssc_i, :) < 0) .* (repp(hssc_i, :) >= 0));
+        conf(cos_i, 4, index) = sum((repp(rssc_i, :) < 0) .* (repp(hssc_i, :) < 0));
+        
+        index = index + 1;
     end
-    
 end
 
 %% Plot accuracy reps
 figure(1)
-plot(unique_cosses, (conf(:, 1) + conf(:, 4)) ./ sum(conf, 2))
+sum_conf = sum(conf, 3);
+plot(unique_cosses, (sum_conf(:, 1) + sum_conf(:, 4)) ./ sum(sum_conf, 2))
+ylim([0, 1])
 beautyplot('$cos(\theta_{ij})$', 'Accuracy', '', false, true);
+savefigure(dir, [pretit, 'accuracy']);
 
 %% Plot precision reps
 figure(2)
-plot(unique_cosses, conf(:, 1) ./ (conf(:, 1) + conf(:, 3)))
+sum_conf = sum(conf, 3);
+plot(unique_cosses, sum_conf(:, 1) ./ (sum_conf(:, 1) + sum_conf(:, 3)))
+ylim([0, 1])
 beautyplot('$cos(\theta_{ij})$', 'Precision', '', false, true);
+savefigure(dir, [pretit, 'precision'])
 
 %% Plot correlation
+figure(3)
+corrs = cellfun(@corrcoef, norm_index, 'UniformOutput', false);
+corrs = cellfun(@(x) x(2, 1), corrs);
+plot(unique_cosses, corrs);
+ylim([0, 1])
+beautyplot('$cos(\theta_{ij})$', 'Correlation', '', false, true);
+savefigure(dir, [pretit, 'correlation'])
 
+%% Plot number of representatives
+figure(4)
+cos_reps = sum(mean(conf(:, 1:2, :), 3), 2);
+plot(unique_cosses, cos_reps);
+ylim([0, 26])
+beautyplot('$cos(\theta_{ij})$', '\# Representatives', '', false, true);
+savefigure(dir, [pretit, 'cosreps']);
 
 %% Plot clustering 
 for name_i = selection
-    figure(name_i+2)
+    figure(name_i+4)
     data = avg(:, :, name_i);
     imagesc(data, [0, 1]);
     
@@ -78,15 +95,14 @@ for name_i = selection
     set(gca, 'YTick', yticks);
     set(gca, 'YTickLabel', round(unique_cosses(yticks), 2));
     set(gca, 'XTick', 1:3);
-    set(gca, 'XTickLabel', unique_reps);
-    beautyplot('Noise', 'Cosine', '', false, false);
+    set(gca, 'XTickLabel', floor(unique_reps * 501));
+    beautyplot('\# Representatives', '$cos(\theta_{ij})$', '', false, true);
     
-    savetitle = ['/noisecos_', strrep(names{name_i}, '.', '')];
-    savefigure(dir, savetitle);
+    savefigure(dir, [pretit, strrep(names{name_i}, '.', '')]);
 end
 
 figure(100)
 imshow([], [0, 1])
 colormap default
 colorbar()
-savefigure(dir, '/noisecos_colormap');
+savefigure(dir, [pretit, 'colorbar']);
