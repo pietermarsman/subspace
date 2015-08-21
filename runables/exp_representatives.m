@@ -1,4 +1,4 @@
-function savefile = exp_representatives( dataset, dataparams, repeats )
+function savefile = exp_representatives( dataset, dataparams, alpha, repeats )
 %EXPERIMENT Clustering with different number of representatives
 %   Clusters all the datasets with different alphas and thus different
 %   number of representatives. Usefull for comparing representatives 
@@ -11,7 +11,6 @@ function savefile = exp_representatives( dataset, dataparams, repeats )
 %% PARAMS
 verbose = true
 numreps = [.01];
-alpha = 4;
 params = {
     'rAlphas', alpha ...
     'rLambda', 1e-4, ...
