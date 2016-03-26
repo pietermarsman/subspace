@@ -50,5 +50,6 @@ boxplot(dur, group, 'labels', datasets)
 beautyplot('', 'Duration HSR / SMRS', '', false, false);
 set(fig, 'Position', position);
 set(gca, 'PlotBoxAspectRatio', ratio)
+rotateticklabel(gca, 90);
 
 savefigure(dir, save_pre);

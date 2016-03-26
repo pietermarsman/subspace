@@ -5,11 +5,17 @@ function [ ] = savefigure( dir, name )
 mkdir(dir)
 mkdir([dir, '/original'])
 
-savename = [dir, '/', name];
-original = [dir, '/original/', name];
+dir = strrep(lower(dir), ' ', '_');
+name = strrep(lower(name), ' ', '_');
+name = strrep(name, '\', '');
+name = strrep(name, '^', '');
+name = strrep(name, '=', '');
+name = strrep(name, '.', '');
+savename = [dir, '/', name]
+original = [dir, '/original/', name]
 
 savefig(original);
-export_fig(savename, '-png', '-transparent');
+export_fig(savename, '-pdf', '-transparent');
 
 end
 
